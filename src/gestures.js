@@ -121,6 +121,9 @@ export async function initGestures(videoEl, canvasEl, callbacks) {
 
     ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
 
+    // const categoryName = result.gestures[0][0].categoryName;
+    if (result.gestures[0]) console.log('vvvvvvvvvvvvvvvvvvv', result.gestures[0][0].categoryName)
+
     const hasHand =
       result.landmarks && result.landmarks.length > 0 &&
       result.gestures && result.gestures.length > 0;
