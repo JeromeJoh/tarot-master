@@ -1,10 +1,12 @@
 // main.js — app entry point: wires all modules, owns game state machine
-import { t } from './i18n.js';
+import { t, setLocale, registerLocale } from './i18n.js';
 import { FULL_DECK, shuffle, renderDeck, updateCardPositions } from './cards.js';
 import { initGestures, getZoneVelocity } from './gestures.js';
 import { getInterpretation } from './ai.js';
 import { initStars, spawnTrail, spawnChargeParticles, spawnInterpretationParticles, updateProgressBar } from './effects.js';
 import { marked } from 'marked';
+import { showToast } from './toast.js';
+import zhStrings from './locales/zh.js';
 
 // --- State Machine ---
 export const STATE = {
@@ -150,6 +152,7 @@ function triggerInterpretation() {
   const token = localStorage.getItem('deepseek_token');
   if (!token) {
     statusText().innerText = t('status.noToken');
+    showToast(t('toast.noApiKey'), 'warning');
     return;
   }
 
@@ -176,7 +179,7 @@ function triggerInterpretation() {
     (err) => {
       if (loadingSpinner()) loadingSpinner().style.display = 'none';
       const msg = t('error.apiFailure').replace('{message}', err.message);
-      content.innerHTML += `<p style="color:red">${msg}</p>`;
+      showToast(msg, 'error');
       console.error(err);
     }
   );
@@ -354,13 +357,13 @@ function onNoHand() {
 function onCameraError(err) {
   console.error('Camera error:', err);
 
-  const isNotAllowed = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError';
   const isNotFound = err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError';
 
   if (isNotFound) {
     statusText().innerText = t('status.cameraNotFound') || 'No camera found.';
   } else {
     statusText().innerText = t('status.cameraPermission');
+    showToast(t('status.cameraPermission'), 'error');
   }
 
   // Only show retry if it might succeed (not a hardware issue)
@@ -412,6 +415,7 @@ function initSettingsModal() {
 
   const descEls = settingsModal?.querySelectorAll('p');
   if (descEls?.[0]) descEls[0].innerText = t('settings.description');
+  if (descEls?.[1]) descEls[1].innerHTML = t('settings.hint');
 
   if (saveBtn) saveBtn.innerText = t('settings.save');
   if (closeBtn) closeBtn.innerText = t('settings.close');
@@ -428,6 +432,7 @@ function initSettingsModal() {
     const val = tokenInput?.value.trim() ?? '';
     localStorage.setItem('deepseek_token', val);
     if (settingsModal) settingsModal.style.display = 'none';
+    showToast(t('toast.settingsSaved'), 'success', 2000);
 
     // If in INTERPRETING state, update status
     if (currentState === STATE.INTERPRETING) {
@@ -473,10 +478,8 @@ function initKeyboard() {
 // --- Localize static UI strings ---
 function localizeUI() {
   const el = (id) => document.getElementById(id);
-  const set = (id, key) => { const e = el(id); if (e) e.innerText = t(key); };
 
-  set('status-text', 'status.starting');
-
+  // Gesture guide labels
   const zoneLeft = el('zone-left');
   if (zoneLeft) zoneLeft.innerHTML = t('guide.swipeRight');
 
@@ -489,17 +492,99 @@ function localizeUI() {
     if (label) label.innerText = t('guide.fistSelect');
   }
 
-  // Header title
-  const h1 = document.querySelector('#header h1');
-  if (h1) h1.innerText = 'Mystic Tarot';
+  // Settings modal
+  const settingsModal = el('settings-modal');
+  if (settingsModal) {
+    const titleEl = settingsModal.querySelector('h2');
+    if (titleEl) titleEl.innerText = t('settings.title');
+    const descEls = settingsModal.querySelectorAll('p');
+    if (descEls?.[0]) descEls[0].innerText = t('settings.description');
+    if (descEls?.[1]) descEls[1].innerHTML = t('settings.hint');
+  }
+  const saveBtn = el('save-settings-btn');
+  if (saveBtn) saveBtn.innerText = t('settings.save');
+  const closeSettingsBtn = el('close-settings-btn');
+  if (closeSettingsBtn) closeSettingsBtn.innerText = t('settings.close');
+
+  // Interpretation modal
+  const modal = interpretModal();
+  if (modal) {
+    const titleEl = modal.querySelector('h2');
+    if (titleEl) titleEl.innerText = t('modal.interpretation.title');
+    const closeBtn = modal.querySelector('button');
+    if (closeBtn) closeBtn.innerText = t('modal.close');
+  }
+
+  // Allow camera button (only visible on camera error)
+  const startBtn = el('start-btn');
+  if (startBtn && startBtn.style.display !== 'none') {
+    startBtn.innerText = t('btn.allowCamera');
+  }
+
+  // Locale switcher button label
+  const switcher = el('locale-switcher');
+  if (switcher) {
+    const stored = localStorage.getItem('preferred_locale') || 'en';
+    switcher.innerText = t(`locale.${stored}`);
+  }
+}
+
+// --- Locale Switcher ---
+function initLocaleSwitcher() {
+  const switcher = document.getElementById('locale-switcher');
+  if (!switcher) return;
+
+  // Registered locales list
+  const LOCALES = ['en', 'zh'];
+
+  // Validate and apply stored preference
+  const stored = localStorage.getItem('preferred_locale');
+  const initial = LOCALES.includes(stored) ? stored : 'en';
+  switcher.innerText = t(`locale.${initial}`);
+
+  switcher.addEventListener('click', () => {
+    const current = localStorage.getItem('preferred_locale') || 'en';
+    const next = current === 'en' ? 'zh' : 'en';
+
+    setLocale(next);
+    localStorage.setItem('preferred_locale', next);
+    switcher.innerText = t(`locale.${next}`);
+
+    localizeUI();
+    // Re-apply current state text after locale change
+    setState(currentState);
+
+    showToast(t('toast.localeSwitched'), 'success', 2000);
+  });
+}
+
+// --- Camera Detection ---
+async function detectCamera() {
+  if (!navigator.mediaDevices?.enumerateDevices) {
+    showToast(t('toast.mediaApiUnavailable'), 'warning');
+    return false;
+  }
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  const hasCamera = devices.some(d => d.kind === 'videoinput');
+  if (!hasCamera) {
+    showToast(t('toast.noCameraFallback'), 'persistent');
+    return false;
+  }
+  return true;
 }
 
 // --- Bootstrap ---
 window.addEventListener('DOMContentLoaded', () => {
+  // Register zh locale and apply stored preference
+  registerLocale('zh', zhStrings);
+  const storedLocale = localStorage.getItem('preferred_locale');
+  const validLocales = ['en', 'zh'];
+  setLocale(validLocales.includes(storedLocale) ? storedLocale : 'en');
+
   localizeUI();
   initSettingsModal();
   initInterpretationModal();
-  initKeyboard();
+  initLocaleSwitcher();
 
   // Stars background
   const bgCanvas = document.getElementById('stars-canvas');
@@ -508,13 +593,24 @@ window.addEventListener('DOMContentLoaded', () => {
   // Start game loop
   requestAnimationFrame(gameLoop);
 
-  // Init gestures — show "starting" only briefly, then restore idle prompt on ready
-  statusText().innerText = t('status.starting');
-  initGestures(
-    document.getElementById('webcam-preview'),
-    document.getElementById('canvas'),
-    { onGesture, onNoHand, onCameraError }
-  ).then(() => {
-    setState(STATE.IDLE);
-  }).catch(onCameraError);
+  // Camera detection and graceful degradation
+  detectCamera().then((hasCamera) => {
+    if (!hasCamera) {
+      // No camera: hide gesture guide, skip initGestures, go straight to keyboard mode
+      const guide = document.getElementById('gesture-guide');
+      if (guide) guide.style.display = 'none';
+      setState(STATE.IDLE);
+      initKeyboard();
+    } else {
+      // Camera present: normal gesture init
+      statusText().innerText = t('status.starting');
+      initGestures(
+        document.getElementById('webcam-preview'),
+        document.getElementById('canvas'),
+        { onGesture, onNoHand, onCameraError }
+      ).then(() => {
+        setState(STATE.IDLE);
+      }).catch(onCameraError);
+    }
+  });
 });

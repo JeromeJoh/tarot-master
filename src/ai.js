@@ -1,11 +1,13 @@
 // ai.js — DeepSeek streaming client
 
+import { t } from './i18n.js';
+
 const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
 
 /**
  * Build the user prompt from the three picked cards.
  * @param {Array<{card: {name: string}, reversed: boolean, position: string}>} pickedCards
- * @returns {string}
+ * @returns {{ system: string, user: string }}
  */
 function buildPrompt(pickedCards) {
   const cardLines = pickedCards.map(({ card, reversed, position }) => {
@@ -13,7 +15,10 @@ function buildPrompt(pickedCards) {
     return `- ${position}: ${card.name} (${orientation})`;
   }).join('\n');
 
-  return `You are a tarot reader. Interpret the following three-card spread:\n\n${cardLines}\n\nProvide a thoughtful, insightful reading in Markdown format.`;
+  const system = t('ai.systemPrompt');
+  const user = t('ai.userPrompt').replace('{cards}', cardLines);
+
+  return { system, user };
 }
 
 /**
@@ -28,6 +33,7 @@ function buildPrompt(pickedCards) {
  */
 export async function getInterpretation(pickedCards, token, onChunk, onDone, onError) {
   try {
+    const prompt = buildPrompt(pickedCards);
     const response = await fetch(DEEPSEEK_API_URL, {
       method: 'POST',
       headers: {
@@ -38,7 +44,8 @@ export async function getInterpretation(pickedCards, token, onChunk, onDone, onE
         model: 'deepseek-chat',
         stream: true,
         messages: [
-          { role: 'user', content: buildPrompt(pickedCards) },
+          { role: 'system', content: prompt.system },
+          { role: 'user', content: prompt.user },
         ],
       }),
     });

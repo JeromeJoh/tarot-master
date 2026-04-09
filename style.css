@@ -559,6 +559,29 @@ h1 {
   }
 }
 
+/* Locale Switcher */
+#locale-switcher {
+  pointer-events: auto;
+  margin-top: 10px;
+  background: transparent;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  color: var(--accent-gold);
+  padding: 4px 14px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  letter-spacing: 2px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+}
+
+#locale-switcher:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
 /* Settings Icon */
 #settings-btn {
   position: absolute;
