@@ -609,6 +609,9 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('canvas'),
         { onGesture, onNoHand, onCameraError }
       ).then(() => {
+        // Show camera preview only after successful init
+        document.getElementById('webcam-preview').style.display = 'block';
+        document.getElementById('canvas').style.display = 'block';
         setState(STATE.IDLE);
       }).catch(onCameraError);
     }

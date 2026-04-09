@@ -229,6 +229,7 @@ h1 {
   transform: scaleX(-1);
   /* Mirror */
   z-index: 100;
+  display: none;
 }
 
 #canvas {
