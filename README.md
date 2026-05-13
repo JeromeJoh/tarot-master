@@ -17,7 +17,10 @@
 
 ## 🚀 快速开始
 
+https://gitee.com/ricky-ai/tarot
+
 ### 前置要求
+
 - 一个现代浏览器（Chrome, Edge, Firefox 等）。
 - 摄像头权限（用于手势控制）。
 - [DeepSeek API Key](https://platform.deepseek.com/api_keys)（用于获取 AI 解读，可选）。
@@ -27,6 +30,7 @@
 本项目为单文件 HTML 应用，无需复杂的构建流程。
 
 1. **克隆项目**
+
    ```bash
    git clone https://gitee.com/rickif/tarot.git
    ```
@@ -51,6 +55,7 @@
    - 对着摄像头**张开五指并保持 3 秒**，AI 将开始为您解读牌面。
 
 ## Todolist
+
 - [] 键盘操控、拖拽、手势识别
 - [] 整体 UI
 - [] 首页卡牌扇形展开，或者 codepen 中的摩擦阻尼特效
@@ -62,7 +67,7 @@
 
 本项目中使用的 Rider-Waite-Smith 塔罗牌图像资源来源于：
 **[Sacred-Texts.com](https://sacred-texts.com/tarot/pkt/index.htm)**
-*The Pictorial Key to the Tarot by A.E. Waite, images by Pamela Colman Smith [1911]*
+_The Pictorial Key to the Tarot by A.E. Waite, images by Pamela Colman Smith [1911]_
 
 感谢 Sacred Texts 对公共领域资源的整理与贡献。
 
