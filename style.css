@@ -560,6 +560,26 @@ h1 {
   }
 }
 
+/* Action buttons pulse animation */
+@keyframes softPulse {
+  0%, 100% { box-shadow: 0 0 10px var(--accent-glow); }
+  50%       { box-shadow: 0 0 28px var(--accent-glow), 0 0 50px rgba(212,175,55,0.3); }
+}
+
+#start-btn,
+#interpret-btn {
+  animation: softPulse 2.4s ease-in-out infinite;
+  font-size: 1.1rem;
+  padding: 12px 40px;
+  letter-spacing: 3px;
+}
+
+#interpret-btn {
+  background: linear-gradient(45deg, #d4af37, #f0e68c);
+  color: #000;
+  font-weight: bold;
+}
+
 /* Locale Switcher */
 #locale-switcher {
   pointer-events: auto;

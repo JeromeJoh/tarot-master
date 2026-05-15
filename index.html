@@ -56,10 +56,13 @@
         </div>
 
         <div id="controls">
-            <button id="start-btn" class="btn" style="display:none">开始体验</button>
+            <!-- camera-error fallback (allow camera) -->
+            <button id="allow-camera-btn" class="btn" style="display:none"></button>
+            <!-- IDLE state: click-to-start -->
+            <button id="start-btn" class="btn" style="display:none"></button>
+            <!-- INTERPRETING state: click-to-read -->
             <button id="interpret-btn" class="btn"
-                style="display:none; background: linear-gradient(45deg, #d4af37, #f0e68c); color: #000; font-weight: bold; box-shadow: 0 0 20px rgba(212,175,55,0.6);">🔮
-                解读命运</button>
+                style="display:none; background: linear-gradient(45deg, #d4af37, #f0e68c); color: #000; font-weight: bold; box-shadow: 0 0 20px rgba(212,175,55,0.6);"></button>
             <div class="spinner" id="loading-spinner"></div>
         </div>
     </div>

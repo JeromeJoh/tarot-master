@@ -1,12 +1,12 @@
 export default {
   // Status messages
   'status.starting': 'Starting...',
-  'status.openPalmToStart': 'Open your palm to begin',
+  'status.openPalmToStart': 'Open palm · Press Enter · or tap the button to begin',
   'status.spinning': 'The wheel of fate begins to turn...',
   'status.pickCard': 'Make a fist to select your card',
   'status.cardsPicked': 'Cards selected: {n}/3',
   'status.fateRevealed': 'Your fate is revealed',
-  'status.openPalmToRead': 'Open your palm to read your fate',
+  'status.openPalmToRead': 'Open palm · Press Enter · or tap the button to read your fate',
   'status.noToken': 'Configure your API key to unlock AI reading',
   'status.readingComplete': 'Your fate has been revealed',
   'status.cameraPermission': 'Camera permission required for gesture control',
@@ -38,6 +38,8 @@ export default {
   // Buttons
   'btn.allowCamera': 'Allow Camera',
   'btn.interpret': '🔮 Read My Fate',
+  'btn.startReading': '✨ Begin',
+  'btn.interpretReading': '🔮 Read My Fate',
 
   // Errors
   'error.apiFailure': 'Oracle connection failed: {message}',

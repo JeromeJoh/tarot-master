@@ -1,12 +1,12 @@
 export default {
   // 状态消息
   'status.starting': '启动中...',
-  'status.openPalmToStart': '张开手掌以开始',
+  'status.openPalmToStart': '张开手掌 · 按 Enter 键 · 或点击按钮开始',
   'status.spinning': '命运之轮开始转动...',
   'status.pickCard': '握拳以选择你的牌',
   'status.cardsPicked': '已选牌数：{n}/3',
   'status.fateRevealed': '你的命运已揭晓',
-  'status.openPalmToRead': '张开手掌以解读命运',
+  'status.openPalmToRead': '张开手掌 · 按 Enter 键 · 或点击按钮解读命运',
   'status.noToken': '请配置 API 密钥以启用 AI 解读',
   'status.readingComplete': '你的命运已揭示',
   'status.cameraPermission': '手势控制需要摄像头权限',
@@ -38,6 +38,8 @@ export default {
   // 按钮
   'btn.allowCamera': '允许摄像头',
   'btn.interpret': '🔮 解读命运',
+  'btn.startReading': '✨ 开始抽牌',
+  'btn.interpretReading': '🔮 解读命运',
 
   // 错误
   'error.apiFailure': '神谕连接失败：{message}',

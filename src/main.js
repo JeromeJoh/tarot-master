@@ -52,11 +52,22 @@ const interpretContent = () => document.getElementById('interpretation-content')
 function setState(newState) {
   currentState = newState;
 
+  const startBtn = document.getElementById('start-btn');
+  const interpretBtn = document.getElementById('interpret-btn');
+
+  // Hide both action buttons by default; show per-state below
+  if (startBtn) startBtn.style.display = 'none';
+  if (interpretBtn) interpretBtn.style.display = 'none';
+
   switch (newState) {
     case STATE.IDLE:
       statusText().innerText = t('status.openPalmToStart');
       gestureGuide().style.opacity = '1';
       pickedZone().style.display = 'none';
+      if (startBtn) {
+        startBtn.style.display = 'block';
+        startBtn.innerText = t('btn.startReading');
+      }
       break;
 
     case STATE.INTRO:
@@ -67,6 +78,8 @@ function setState(newState) {
     case STATE.PICKING:
       statusText().innerText = t('status.pickCard');
       pickedZone().style.display = 'flex';
+      gestureGuide().style.display = 'flex';
+      gestureGuide().style.opacity = '1';
       break;
 
     case STATE.REVEALING:
@@ -86,6 +99,10 @@ function setState(newState) {
         statusText().innerText = t('status.openPalmToRead');
       } else {
         statusText().innerText = t('status.noToken');
+      }
+      if (interpretBtn) {
+        interpretBtn.style.display = 'block';
+        interpretBtn.innerText = t('btn.interpretReading');
       }
       break;
     }
@@ -367,7 +384,7 @@ function onCameraError(err) {
   }
 
   // Only show retry if it might succeed (not a hardware issue)
-  const btn = document.getElementById('start-btn');
+  const btn = document.getElementById('allow-camera-btn');
   if (btn && !isNotFound) {
     btn.style.display = 'block';
     btn.innerText = t('btn.allowCamera');
@@ -462,16 +479,41 @@ function initInterpretationModal() {
 // --- Keyboard fallback ---
 function initKeyboard() {
   window.addEventListener('keydown', (e) => {
-    // Press Enter to start game from IDLE (debug / fallback)
-    if (e.key === 'Enter' && currentState === STATE.IDLE) {
-      introTargetIndex = Math.floor(FULL_DECK.length / 2);
-      startGame();
-      return;
+    // Press Enter to start game from IDLE, or trigger interpretation from INTERPRETING
+    if (e.key === 'Enter') {
+      if (currentState === STATE.IDLE) {
+        introTargetIndex = Math.floor(FULL_DECK.length / 2);
+        startGame();
+        return;
+      }
+      if (currentState === STATE.INTERPRETING) {
+        triggerInterpretation();
+        return;
+      }
     }
     if (currentState !== STATE.PICKING) return;
     if (e.key === 'ArrowLeft') velocity -= 0.1;
     if (e.key === 'ArrowRight') velocity += 0.1;
     if (e.key === 'ArrowUp' || e.key === ' ') selectCard();
+  });
+}
+
+// --- Center button click handlers ---
+function initCenterButtons() {
+  const startBtn = document.getElementById('start-btn');
+  const interpretBtn = document.getElementById('interpret-btn');
+
+  startBtn?.addEventListener('click', () => {
+    if (currentState === STATE.IDLE) {
+      introTargetIndex = Math.floor(FULL_DECK.length / 2);
+      startGame();
+    }
+  });
+
+  interpretBtn?.addEventListener('click', () => {
+    if (currentState === STATE.INTERPRETING) {
+      triggerInterpretation();
+    }
   });
 }
 
@@ -515,10 +557,17 @@ function localizeUI() {
     if (closeBtn) closeBtn.innerText = t('modal.close');
   }
 
-  // Allow camera button (only visible on camera error)
+  // Action buttons (text only; visibility is managed by setState)
   const startBtn = el('start-btn');
-  if (startBtn && startBtn.style.display !== 'none') {
-    startBtn.innerText = t('btn.allowCamera');
+  if (startBtn) startBtn.innerText = t('btn.startReading');
+
+  const interpretBtn = el('interpret-btn');
+  if (interpretBtn) interpretBtn.innerText = t('btn.interpretReading');
+
+  // Allow camera button (only visible on camera error)
+  const allowCameraBtn = el('allow-camera-btn');
+  if (allowCameraBtn && allowCameraBtn.style.display !== 'none') {
+    allowCameraBtn.innerText = t('btn.allowCamera');
   }
 
   // Locale switcher button label
@@ -593,6 +642,10 @@ window.addEventListener('DOMContentLoaded', () => {
   // Start game loop
   requestAnimationFrame(gameLoop);
 
+  // Keyboard shortcuts and center button clicks — always active
+  initKeyboard();
+  initCenterButtons();
+
   // Camera detection and graceful degradation
   detectCamera().then((hasCamera) => {
     if (!hasCamera) {
@@ -600,7 +653,6 @@ window.addEventListener('DOMContentLoaded', () => {
       const guide = document.getElementById('gesture-guide');
       if (guide) guide.style.display = 'none';
       setState(STATE.IDLE);
-      initKeyboard();
     } else {
       // Camera present: normal gesture init
       statusText().innerText = t('status.starting');
