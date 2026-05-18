@@ -1,5 +1,6 @@
 // gestures.js — GestureRecognizer init, frame processing, gesture detection
-import { FilesetResolver, GestureRecognizer, DrawingUtils } from '@mediapipe/tasks-vision';
+// NOTE: @mediapipe/tasks-vision is loaded lazily on first call to initGestures()
+// so the heavy WASM bundle is not fetched on page load.
 
 // Zone boundaries (normalized x-position of wrist landmark)
 export const ZONE = {
@@ -40,19 +41,29 @@ export function getZoneVelocity(x) {
  * Initialize the GestureRecognizer, start the webcam, and begin the
  * requestAnimationFrame processing loop.
  *
+ * MediaPipe is imported dynamically here so the WASM bundle is only
+ * fetched when the user explicitly requests camera access.
+ *
  * @param {HTMLVideoElement} videoEl
  * @param {HTMLCanvasElement} canvasEl
  * @param {{
  *   onGesture: (landmarks: object[], categories: object[]) => void,
  *   onNoHand: () => void,
  *   onCameraError: (err: Error) => void,
- *   onSelectCard?: () => void,
- *   onPalmHold?: () => void,
  * }} callbacks
  * @returns {Promise<void>}
  */
 export async function initGestures(videoEl, canvasEl, callbacks) {
   let recognizer;
+
+  // --- Lazy-load MediaPipe (only fetched on first user-initiated call) ---
+  let FilesetResolver, GestureRecognizer, DrawingUtils;
+  try {
+    ({ FilesetResolver, GestureRecognizer, DrawingUtils } =
+      await import('@mediapipe/tasks-vision'));
+  } catch (err) {
+    throw err;
+  }
 
   // --- Initialize GestureRecognizer ---
   try {
@@ -73,7 +84,7 @@ export async function initGestures(videoEl, canvasEl, callbacks) {
       minTrackingConfidence: 0.7,
     });
   } catch (err) {
-    throw err; // propagate to caller's .catch() — onCameraError is called there
+    throw err;
   }
 
   // --- Start webcam ---
@@ -89,12 +100,11 @@ export async function initGestures(videoEl, canvasEl, callbacks) {
       };
     });
   } catch (err) {
-    // Stop any partial stream before propagating
     if (videoEl.srcObject) {
       videoEl.srcObject.getTracks().forEach(t => t.stop());
       videoEl.srcObject = null;
     }
-    throw err; // propagate to caller's .catch() — onCameraError is called there
+    throw err;
   }
 
   // --- Set up canvas drawing ---
@@ -111,7 +121,6 @@ export async function initGestures(videoEl, canvasEl, callbacks) {
       return;
     }
 
-    // Sync canvas pixel buffer to video dimensions (leave CSS sizing to stylesheet)
     if (canvasEl.width !== videoEl.videoWidth || canvasEl.height !== videoEl.videoHeight) {
       canvasEl.width = videoEl.videoWidth;
       canvasEl.height = videoEl.videoHeight;
@@ -122,8 +131,6 @@ export async function initGestures(videoEl, canvasEl, callbacks) {
 
     ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
 
-    if (result.gestures[0]) { /* gesture detected */ }
-
     const hasHand =
       result.landmarks && result.landmarks.length > 0 &&
       result.gestures && result.gestures.length > 0;
@@ -133,25 +140,19 @@ export async function initGestures(videoEl, canvasEl, callbacks) {
       noHandFired = false;
 
       const landmarks = result.landmarks[0];
-      const categories = result.gestures[0]; // array of category objects
+      const categories = result.gestures[0];
 
-      // Draw landmarks and connectors — mirroring the reference predictWebcam style
       ctx.save();
       drawingUtils.drawConnectors(
         landmarks,
         GestureRecognizer.HAND_CONNECTIONS,
         { color: '#00FF00', lineWidth: 5 }
       );
-      drawingUtils.drawLandmarks(landmarks, {
-        color: '#FF0000',
-        lineWidth: 2,
-      });
+      drawingUtils.drawLandmarks(landmarks, { color: '#FF0000', lineWidth: 2 });
       ctx.restore();
 
-      // Notify caller with raw data — all hold/state logic is handled in main.js
       callbacks.onGesture(landmarks, categories);
     } else {
-      // No hand detected
       const elapsed = Date.now() - lastHandTime;
       if (elapsed >= NO_HAND_TIMEOUT && !noHandFired) {
         noHandFired = true;

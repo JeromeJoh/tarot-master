@@ -36,6 +36,8 @@ let fistHoldStart = 0;
 let isPalmHeld = false;
 let palmHoldStart = 0;
 let noHandTimer = null;
+// Tracks whether camera + gesture recognizer initialised successfully
+let cameraReady = false;
 
 // --- DOM refs ---
 const statusText = () => document.getElementById('status-text');
@@ -61,7 +63,10 @@ function setState(newState) {
 
   switch (newState) {
     case STATE.IDLE:
-      statusText().innerText = t('status.openPalmToStart');
+      // Show palm hint only when gesture control is available
+      statusText().innerText = cameraReady
+        ? t('status.openPalmToStart')
+        : t('status.clickToStart');
       gestureGuide().style.opacity = '1';
       pickedZone().style.display = 'none';
       if (startBtn) {
@@ -376,36 +381,19 @@ function onCameraError(err) {
 
   const isNotFound = err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError';
 
-  // Fall back to IDLE first so the manual start button becomes visible
+  // Fall back to IDLE so the manual start button stays visible
   setState(STATE.IDLE);
 
-  // Then override status text with the specific camera message (must come after setState)
+  // Update status text — no toast on camera errors
   if (isNotFound) {
     statusText().innerText = t('status.cameraNotFound') || 'No camera found.';
   } else {
     statusText().innerText = t('status.cameraPermission');
-    showToast(t('status.cameraPermission'), 'error');
   }
 
-  // Show retry button for recoverable errors (permission denied, not hardware missing)
+  // Re-show the camera button so the user can retry
   const btn = document.getElementById('allow-camera-btn');
-  if (btn && !isNotFound) {
-    btn.style.display = 'block';
-    btn.innerText = t('btn.allowCamera');
-    btn.onclick = () => {
-      btn.style.display = 'none';
-      statusText().innerText = t('status.starting');
-      initGestures(
-        document.getElementById('webcam-preview'),
-        document.getElementById('canvas'),
-        { onGesture, onNoHand, onCameraError }
-      ).then(() => {
-        document.getElementById('webcam-preview').style.display = 'block';
-        document.getElementById('canvas').style.display = 'block';
-        setState(STATE.IDLE);
-      }).catch(onCameraError);
-    };
-  }
+  if (btn) btn.style.display = 'inline-flex';
 }
 
 // --- Zone highlight helpers ---
@@ -572,11 +560,7 @@ function localizeUI() {
   const interpretBtn = el('interpret-btn');
   if (interpretBtn) interpretBtn.innerText = t('btn.interpretReading');
 
-  // Allow camera button (only visible on camera error)
-  const allowCameraBtn = el('allow-camera-btn');
-  if (allowCameraBtn && allowCameraBtn.style.display !== 'none') {
-    allowCameraBtn.innerText = t('btn.allowCamera');
-  }
+  // Allow camera button is now icon-only in the top bar — no text to update
 
   // Locale switcher button label
   const switcher = el('locale-switcher');
@@ -612,19 +596,30 @@ function initLocaleSwitcher() {
   });
 }
 
-// --- Camera Detection ---
-async function detectCamera() {
-  if (!navigator.mediaDevices?.enumerateDevices) {
-    showToast(t('toast.mediaApiUnavailable'), 'warning');
-    return false;
-  }
-  const devices = await navigator.mediaDevices.enumerateDevices();
-  const hasCamera = devices.some(d => d.kind === 'videoinput');
-  if (!hasCamera) {
-    showToast(t('toast.noCameraFallback'), 'persistent');
-    return false;
-  }
-  return true;
+// --- Camera / Gesture init (on-demand, triggered by allow-camera-btn) ---
+function initCameraBtn() {
+  const btn = document.getElementById('allow-camera-btn');
+  if (!btn) return;
+
+  // Show the button by default — user clicks to enable gesture control
+  btn.style.display = 'inline-flex';
+
+  btn.addEventListener('click', () => {
+    // Hide button while loading; it reappears on error via onCameraError
+    btn.style.display = 'none';
+    statusText().innerText = t('status.starting');
+
+    initGestures(
+      document.getElementById('webcam-preview'),
+      document.getElementById('canvas'),
+      { onGesture, onNoHand, onCameraError }
+    ).then(() => {
+      document.getElementById('webcam-preview').style.display = 'block';
+      document.getElementById('canvas').style.display = 'block';
+      cameraReady = true;
+      setState(STATE.IDLE);
+    }).catch(onCameraError);
+  });
 }
 
 // --- Bootstrap ---
@@ -648,26 +643,9 @@ window.addEventListener('DOMContentLoaded', () => {
   initKeyboard();
   initCenterButtons();
 
-  // Camera detection and graceful degradation
-  detectCamera().then((hasCamera) => {
-    if (!hasCamera) {
-      // No camera: hide gesture guide, skip initGestures, go straight to keyboard mode
-      const guide = document.getElementById('gesture-guide');
-      if (guide) guide.style.display = 'none';
-      setState(STATE.IDLE);
-    } else {
-      // Camera present: normal gesture init
-      statusText().innerText = t('status.starting');
-      initGestures(
-        document.getElementById('webcam-preview'),
-        document.getElementById('canvas'),
-        { onGesture, onNoHand, onCameraError }
-      ).then(() => {
-        // Show camera preview only after successful init
-        document.getElementById('webcam-preview').style.display = 'block';
-        document.getElementById('canvas').style.display = 'block';
-        setState(STATE.IDLE);
-      }).catch(onCameraError);
-    }
-  });
+  // Camera button wires up on-demand gesture init (no auto camera request on load)
+  initCameraBtn();
+
+  // Start in IDLE immediately — no camera check needed
+  setState(STATE.IDLE);
 });

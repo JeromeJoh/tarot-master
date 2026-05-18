@@ -2,6 +2,7 @@ export default {
   // Status messages
   'status.starting': 'Starting...',
   'status.openPalmToStart': 'Open palm · Press Enter · or tap the button to begin',
+  'status.clickToStart': 'Press Enter or tap the button to begin',
   'status.spinning': 'The wheel of fate begins to turn...',
   'status.pickCard': 'Make a fist to select your card',
   'status.cardsPicked': 'Cards selected: {n}/3',

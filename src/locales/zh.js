@@ -2,6 +2,7 @@ export default {
   // 状态消息
   'status.starting': '启动中...',
   'status.openPalmToStart': '张开手掌 · 按 Enter 键 · 或点击按钮开始',
+  'status.clickToStart': '按 Enter 键或点击按钮开始',
   'status.spinning': '命运之轮开始转动...',
   'status.pickCard': '握拳以选择你的牌',
   'status.cardsPicked': '已选牌数：{n}/3',

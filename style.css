@@ -728,60 +728,63 @@ h3 {
 }
 
 /* ── Locale Switcher ── */
-#locale-switcher {
+/* (now part of #top-bar — see below) */
+
+/* ── Settings Icon ── */
+/* (now part of #top-bar — see below) */
+
+/* ── Top-right control bar ── */
+#top-bar {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  z-index: 1000;
   pointer-events: auto;
-  margin-top: var(--space-sm);
-  background: transparent;
+}
+
+/* Shared style for all top-bar icon/text buttons */
+.top-bar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  min-width: 36px;
+  padding: 0 12px;
+  background: rgba(13, 10, 35, 0.55);
   border: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
-  padding: 4px 16px;
-  font-size: 0.75rem;
-  font-family: 'Syne', sans-serif;
-  letter-spacing: 2px;
   border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: all 0.3s;
+  color: var(--text-secondary);
+  font-family: 'Syne', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  /* Fixed width prevents the pill from resizing between "EN" and "中文" */
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: color 0.25s, border-color 0.25s, background 0.25s, box-shadow 0.25s;
+  /* Fixed min-width so EN↔中文 doesn't resize */
   min-width: 64px;
   text-align: center;
 }
 
-#locale-switcher:hover {
-  background: rgba(201, 168, 76, 0.1);
-  border-color: var(--accent-gold);
+.top-bar-btn:hover {
   color: var(--accent-cream);
+  border-color: var(--accent-gold);
+  background: rgba(201, 168, 76, 0.1);
   box-shadow: 0 0 10px var(--accent-glow);
 }
 
-/* ── Settings Icon ── */
-#settings-btn {
-  position: absolute;
-  top: var(--space-md);
-  right: var(--space-md);
-  width: 40px;
-  height: 40px;
-  color: var(--text-secondary);
-  cursor: pointer;
-  z-index: 1000;
-  transition: transform 0.5s, color 0.3s;
-  pointer-events: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(13, 10, 35, 0.5);
-  border-radius: 50%;
-  border: 1px solid var(--border-subtle);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+/* Settings button rotates on hover */
+#settings-btn:hover svg {
+  transform: rotate(90deg);
+  transition: transform 0.4s ease;
 }
 
-#settings-btn:hover {
-  transform: rotate(90deg);
-  color: var(--accent-cream);
-  border-color: var(--accent-gold);
-  background: rgba(201, 168, 76, 0.1);
-  box-shadow: 0 0 12px var(--accent-glow);
+#settings-btn svg {
+  transition: transform 0.4s ease;
 }
 
 /* ── Animations ── */
