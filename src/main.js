@@ -7,6 +7,7 @@ import { spawnTrail, spawnChargeParticles, spawnInterpretationParticles, updateP
 import { marked } from 'marked';
 import { showToast } from './toast.js';
 import zhStrings from './locales/zh.js';
+import { playIntro, playHeaderCollapse } from './intro.js';
 
 // --- State Machine ---
 export const STATE = {
@@ -116,6 +117,11 @@ function setState(newState) {
 
 // --- Game Logic ---
 function startGame() {
+  // Collapse the header to the top-left badge before the cards animate in
+  playHeaderCollapse().then(() => {
+    document.getElementById('header')?.classList.add('collapsed');
+  });
+
   currentDeck = shuffle([...FULL_DECK]);
   pickedCards = [];
   currentIndex = currentDeck.length + 5; // Start off-screen for intro animation
@@ -193,6 +199,9 @@ function triggerInterpretation() {
     (chunk) => {
       fullText += chunk;
       content.innerHTML = marked.parse(fullText);
+      // Auto-scroll to bottom as content streams in
+      const modal = interpretModal();
+      if (modal) modal.scrollTop = modal.scrollHeight;
     },
     () => {
       if (loadingSpinner()) loadingSpinner().style.display = 'none';
@@ -414,7 +423,57 @@ function resetHighlights() {
   document.getElementById('icon-select')?.classList.remove('active');
 }
 
-// --- Settings Modal ---
+// --- Instructions Modal ---
+function initInstructionsModal() {
+  const btn = document.getElementById('instructions-btn');
+  const modal = document.getElementById('instructions-modal');
+  const closeBtn = document.getElementById('instructions-close-btn');
+  const list = document.getElementById('instructions-steps');
+  if (!btn || !modal || !list) return;
+
+  function buildSteps() {
+    const steps = t('instructions.steps');
+    if (!Array.isArray(steps)) return;
+    list.innerHTML = '';
+    steps.forEach(({ icon, heading, body }) => {
+      const li = document.createElement('li');
+      li.className = 'instructions-step';
+      li.innerHTML = `
+        <div class="instructions-step-icon" aria-hidden="true">${icon}</div>
+        <div class="instructions-step-body">
+          <div class="instructions-step-heading">${heading}</div>
+          <div class="instructions-step-text">${body}</div>
+        </div>`;
+      list.appendChild(li);
+    });
+  }
+
+  function openModal() {
+    // Rebuild steps so locale changes are reflected
+    buildSteps();
+    const titleEl = modal.querySelector('h2');
+    if (titleEl) titleEl.innerText = t('instructions.title');
+    if (closeBtn) closeBtn.innerText = t('instructions.close');
+    modal.classList.add('open');
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+  }
+
+  btn.addEventListener('click', openModal);
+  closeBtn?.addEventListener('click', closeModal);
+
+  // Close on backdrop click
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  // Close on Escape
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+  });
+}
 function initSettingsModal() {
   const settingsBtn = document.getElementById('settings-btn');
   const settingsModal = document.getElementById('settings-modal');
@@ -631,6 +690,7 @@ window.addEventListener('DOMContentLoaded', () => {
   setLocale('en');
 
   localizeUI();
+  initInstructionsModal();
   initSettingsModal();
   initInterpretationModal();
   initLocaleSwitcher();
@@ -646,6 +706,8 @@ window.addEventListener('DOMContentLoaded', () => {
   // Camera button wires up on-demand gesture init (no auto camera request on load)
   initCameraBtn();
 
-  // Start in IDLE immediately — no camera check needed
-  setState(STATE.IDLE);
+  // Run intro animation, then enter IDLE state
+  playIntro().then(() => {
+    setState(STATE.IDLE);
+  });
 });

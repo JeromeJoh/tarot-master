@@ -60,4 +60,40 @@ export default {
   // 语言切换控件
   'locale.en': 'EN',
   'locale.zh': '中文',
+
+  // 操作说明弹窗
+  'instructions.title': '操作说明',
+  'instructions.close': '知道了',
+  'instructions.steps': [
+    {
+      icon: '✦',
+      heading: '开始占卜',
+      body: '点击 <strong>✨ 开始抽牌</strong>，或向摄像头展开手掌，即可洗牌并开始。',
+    },
+    {
+      icon: '👁',
+      heading: '启用手势控制（可选）',
+      body: '点击右上角摄像头图标授予摄像头权限，启用后可全程免触控操作。',
+    },
+    {
+      icon: '🃏',
+      heading: '浏览牌组',
+      body: '将手移至屏幕<strong>左侧或右侧边缘</strong>即可滚动牌组，也可使用方向键操作。',
+    },
+    {
+      icon: '✊',
+      heading: '选择一张牌',
+      body: '将手移至屏幕中央，对准目标牌<strong>握拳并保持</strong>，充能环填满后即完成选择。重复操作直至选出 3 张牌。',
+    },
+    {
+      icon: '🔮',
+      heading: '揭示命运',
+      body: '选出 3 张牌后自动翻牌。点击 <strong>🔮 解读命运</strong>（或展开手掌）即可获得 AI 解读。',
+    },
+    {
+      icon: '🔑',
+      heading: 'AI 解读需要 API 密钥',
+      body: '点击右上角齿轮图标打开<strong>设置</strong>，粘贴你的 <a href="https://platform.deepseek.com/api_keys" target="_blank">DeepSeek API 密钥</a>。密钥仅存储在本地，不会上传至任何服务器。',
+    },
+  ],
 }

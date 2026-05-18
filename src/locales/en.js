@@ -60,4 +60,40 @@ export default {
   // Locale switcher
   'locale.en': 'EN',
   'locale.zh': '中文',
+
+  // Instructions modal
+  'instructions.title': 'How to Play',
+  'instructions.close': 'Got it',
+  'instructions.steps': [
+    {
+      icon: '✦',
+      heading: 'Begin your reading',
+      body: 'Click <strong>✨ Begin</strong> — or hold an open palm toward the camera — to shuffle the deck and start.',
+    },
+    {
+      icon: '👁',
+      heading: 'Enable gesture control (optional)',
+      body: 'Click the camera icon in the top-right to grant camera access. Once active, you can control everything hands-free.',
+    },
+    {
+      icon: '🃏',
+      heading: 'Browse the cards',
+      body: 'Move your hand to the <strong>left or right edge</strong> of the screen to scroll through the deck. Use arrow keys as an alternative.',
+    },
+    {
+      icon: '✊',
+      heading: 'Select a card',
+      body: 'Centre your hand and <strong>hold a fist</strong> over the card you want. A charge ring will fill — release when it completes. Repeat until 3 cards are chosen.',
+    },
+    {
+      icon: '🔮',
+      heading: 'Reveal your fate',
+      body: 'After 3 cards are selected they are revealed automatically. Click <strong>🔮 Read My Fate</strong> (or hold an open palm) to receive your AI interpretation.',
+    },
+    {
+      icon: '🔑',
+      heading: 'API key required for AI reading',
+      body: 'Open <strong>Settings</strong> (top-right gear icon) and paste your <a href="https://platform.deepseek.com/api_keys" target="_blank">DeepSeek API key</a>. It is stored locally and never sent anywhere else.',
+    },
+  ],
 }

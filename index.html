@@ -13,6 +13,8 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
+    <!-- GSAP for intro animation -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <!-- Toast web component — must load before main module so customElements.define runs first -->
     <script type="module" src="/src/components/toast.js"></script>
     <!-- Galaxy background web component (bundles its own Three.js import) -->
@@ -52,7 +54,10 @@
 
         <!-- ── Header (title + status) ── -->
         <div id="header">
-            <h1>Mystic Tarot</h1>
+            <h1>
+                <span class="word-mystic">Mystic</span>
+                <span class="word-tarot">Tarot</span>
+            </h1>
             <div id="status-text">Starting...</div>
             <div id="charge-progress-container">
                 <div id="charge-progress-bar"></div>
@@ -99,33 +104,71 @@
 
     <!-- Interpretation Modal -->
     <div id="interpretation-modal">
-        <h2>Revelation</h2>
-        <div id="interpretation-content"></div>
-        <div style="text-align: center; margin-top: 30px;">
-            <button class="btn"
-                onclick="document.getElementById('interpretation-modal').style.display='none'">Close</button>
+        <!-- Sticky header with close button — always visible -->
+        <div class="modal-header">
+            <h2>Revelation</h2>
+            <button class="modal-close-btn" id="interpretation-close-btn" aria-label="Close">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                    <path
+                        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                </svg>
+            </button>
+        </div>
+        <!-- Scrollable body -->
+        <div class="modal-body">
+            <div id="interpretation-content"></div>
         </div>
     </div>
 
     <!-- Settings Modal -->
     <div id="settings-modal">
         <div class="settings-content">
-            <h2>API Key Configuration (Local Storage)</h2>
-            <p>Enter your DeepSeek API Key to enable AI interpretation.</p>
-            <p style="font-size: 0.9rem; color: #aaa;">
-                No key yet? Visit <a href="https://platform.deepseek.com/api_keys" target="_blank">DeepSeek Platform</a>
-                to get one.
-            </p>
-            <input type="password" id="api-token-input" placeholder="sk-...">
-            <div id="token-status" style="font-size: 0.8rem; margin: 10px 0; min-height: 1.2em;"></div>
-            <button id="save-settings-btn" class="btn">Save</button>
-            <button id="close-settings-btn" class="btn"
-                style="background: transparent; border: 1px solid #444; margin-top: 10px;">Close</button>
+            <!-- Sticky header -->
+            <div class="modal-header">
+                <h2>API Key Configuration (Local Storage)</h2>
+                <button class="modal-close-btn" id="close-settings-btn" aria-label="Close settings"></button>
+            </div>
+            <!-- Scrollable body -->
+            <div class="modal-body">
+                <p>Enter your DeepSeek API Key to enable AI interpretation.</p>
+                <p style="font-size: 0.9rem; color: #aaa;">
+                    No key yet? Visit <a href="https://platform.deepseek.com/api_keys" target="_blank">DeepSeek
+                        Platform</a>
+                    to get one.
+                </p>
+                <input type="password" id="api-token-input" placeholder="sk-...">
+                <div id="token-status" style="font-size: 0.8rem; margin: 10px 0; min-height: 1.2em;"></div>
+                <button id="save-settings-btn" class="btn">Save</button>
+            </div>
         </div>
     </div>
 
     <!-- Toast web component host — singleton, managed by my-toast -->
     <my-toast position="bottom-left" animation="fade-slide"></my-toast>
+
+    <!-- Instructions Modal -->
+    <div id="instructions-modal" role="dialog" aria-modal="true" aria-labelledby="instructions-title">
+        <div class="instructions-content">
+            <!-- Sticky header -->
+            <div class="modal-header">
+                <h2 id="instructions-title">How to Play</h2>
+                <button class="modal-close-btn" id="instructions-close-btn" aria-label="Close instructions"></button>
+            </div>
+            <!-- Scrollable body -->
+            <div class="modal-body">
+                <ol id="instructions-steps" class="instructions-steps"></ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions trigger button (bottom-right) -->
+    <button id="instructions-btn" class="top-bar-btn instructions-fab" aria-label="Instructions">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+            <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+        </svg>
+        <span>Guide</span>
+    </button>
 
     <script type="module" src="/src/main.js"></script>
 </body>

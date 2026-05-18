@@ -68,11 +68,58 @@ h1 {
   margin: 0;
   letter-spacing: 5px;
   color: var(--accent-cream);
-  /* Warm layered glow instead of flat gold */
   text-shadow:
     0 0 20px var(--accent-glow),
     0 0 60px var(--peach-glow),
     0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Intro title — two words side-by-side with a light-gap between ── */
+#header h1 {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  /* Gap between "Mystic" and "Tarot" — the background glow bleeds through here */
+  gap: 0.55em;
+  overflow: hidden; /* clip the slide-in animation */
+  line-height: 1.1;
+  position: relative;
+}
+
+.word-mystic,
+.word-tarot {
+  display: inline-block;
+  /* Each word clips to its own box so the slide animation is clean */
+  overflow: hidden;
+}
+
+/* Light-gap glow between the two words — pseudo-element on the h1 */
+#header h1::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 120%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--accent-peach) 40%,
+    var(--accent-gold) 50%,
+    var(--accent-peach) 60%,
+    transparent 100%
+  );
+  opacity: 0.55;
+  filter: blur(3px);
+  pointer-events: none;
+  /* Only visible during intro — hidden once header collapses */
+  transition: opacity 0.4s;
+}
+
+/* Hide the gap glow once the header is in collapsed/badge state */
+#header.collapsed h1::before {
+  opacity: 0;
 }
 
 h2,
@@ -227,14 +274,21 @@ h3 {
   font-size: clamp(1.6rem, 4vw, 2.6rem);
 }
 
-/* Decorative divider line under h1 */
-#header h1::after {
+/* Decorative divider line under h1 — only in expanded state */
+#header:not(.collapsed) h1::after {
   content: '';
   display: block;
   width: 60px;
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
   margin: var(--space-xs) auto 0;
+  /* ::after on a flex container won't render inline — use a separate element approach */
+  /* This rule is kept for reference but the flex layout means ::after is a flex item */
+}
+
+/* In collapsed badge mode the decorative line is hidden */
+#header.collapsed h1::after {
+  display: none;
 }
 
 #status-text {
@@ -307,6 +361,76 @@ h3 {
   z-index: 200;
 }
 
+/* ── Shared modal chrome ─────────────────────────────────────────────────────
+   Pattern: outer shell clips the shape; inner .modal-body scrolls.
+   .modal-header is sticky and always visible above the scroll area.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Sticky header row: title + close button */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0; /* never shrink inside a flex column */
+}
+
+.modal-header h2 {
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+/* × close button — icon-only, top-right of every modal */
+.modal-close-btn {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  padding: 0;
+  /* Draw × via pseudo-elements when no SVG child is present */
+  position: relative;
+}
+
+.modal-close-btn:hover {
+  background: rgba(201, 168, 76, 0.12);
+  border-color: var(--accent-gold);
+  color: var(--accent-cream);
+}
+
+/* × lines — shown when the button has no SVG child */
+.modal-close-btn:not(:has(svg))::before,
+.modal-close-btn:not(:has(svg))::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+}
+.modal-close-btn:not(:has(svg))::before { transform: rotate(45deg); }
+.modal-close-btn:not(:has(svg))::after  { transform: rotate(-45deg); }
+
+/* Scrollable body — sits below the sticky header */
+.modal-body {
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  flex: 1 1 auto; /* fill remaining height in a flex-column shell */
+  min-height: 0;  /* required for flex children to shrink below content size */
+}
+
 /* ── Interpretation Modal ── */
 #interpretation-modal {
   position: absolute;
@@ -314,14 +438,17 @@ h3 {
   left: 50%;
   transform: translate(-50%, -50%);
   width: min(85%, 820px);
-  max-height: 80%;
+  height: 80vh;
+  /* Outer shell: shape + border + shadow — NO overflow here */
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  padding: var(--space-lg);
   border-radius: var(--radius-lg);
-  color: var(--text-primary);
-  overflow-y: auto;
+  overflow: hidden; /* clips scrollbar to rounded corners */
   display: none;
+  /* Use flex-column so header stays fixed and body fills the rest */
+  flex-direction: column;
+  padding: var(--space-lg);
+  box-sizing: border-box;
   pointer-events: auto;
   box-shadow:
     0 0 60px rgba(0, 0, 0, 0.9),
@@ -332,16 +459,16 @@ h3 {
   -webkit-backdrop-filter: blur(20px);
 }
 
-#interpretation-modal h2 {
+#interpretation-modal.open,
+#interpretation-modal[style*="display: block"],
+#interpretation-modal[style*="display:block"] {
+  display: flex;
+}
+
+#interpretation-modal .modal-header h2 {
   color: var(--accent-cream);
-  text-align: center;
-  margin-top: 0;
-  margin-bottom: var(--space-md);
   font-size: 1.8rem;
   letter-spacing: 2px;
-  /* Decorative rule */
-  padding-bottom: var(--space-sm);
-  border-bottom: 1px solid var(--border-subtle);
 }
 
 #interpretation-content {
@@ -371,29 +498,41 @@ h3 {
   z-index: 3000;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  box-sizing: border-box;
+}
+
+#settings-modal.open {
+  display: flex;
 }
 
 .settings-content {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  width: 90%;
+  width: 100%;
   max-width: 420px;
-  margin: 14vh auto;
-  padding: var(--space-lg);
+  max-height: 88vh;
   border-radius: var(--radius-lg);
-  text-align: center;
-  color: var(--text-primary);
+  overflow: hidden; /* clips scrollbar to rounded corners */
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-lg);
+  box-sizing: border-box;
   box-shadow:
     0 0 40px rgba(0, 0, 0, 0.8),
     0 0 80px var(--violet-glow);
 }
 
-.settings-content h2 {
+.settings-content .modal-header h2 {
   color: var(--accent-cream);
-  margin-top: 0;
-  margin-bottom: var(--space-md);
   font-size: 1.3rem;
   letter-spacing: 1px;
+}
+
+.settings-content .modal-body {
+  text-align: center;
 }
 
 .settings-content p {
@@ -817,4 +956,127 @@ h3 {
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(201, 168, 76, 0.4);
+}
+
+/* ── Instructions FAB (bottom-right) ── */
+.instructions-fab {
+  position: fixed;
+  bottom: var(--space-md);
+  right: var(--space-md);
+  z-index: 1000;
+  gap: 6px;
+  /* Override top-bar-btn min-width for this compact button */
+  min-width: unset;
+  padding: 0 14px;
+}
+
+/* ── Instructions Modal overlay ── */
+#instructions-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 4, 16, 0.82);
+  z-index: 3000;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  box-sizing: border-box;
+}
+
+#instructions-modal.open {
+  display: flex;
+}
+
+.instructions-content {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  width: 100%;
+  max-width: 560px;
+  max-height: 88vh;
+  border-radius: var(--radius-lg);
+  overflow: hidden; /* clips scrollbar to rounded corners */
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-lg);
+  box-sizing: border-box;
+  box-shadow:
+    0 0 40px rgba(0, 0, 0, 0.8),
+    0 0 80px var(--violet-glow);
+}
+
+.instructions-content .modal-header h2 {
+  color: var(--accent-cream);
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+}
+
+/* ── Steps list ── */
+.instructions-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  counter-reset: step;
+}
+
+.instructions-step {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: var(--space-sm);
+  align-items: start;
+}
+
+.instructions-step-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.instructions-step-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.instructions-step-heading {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-cream);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.instructions-step-text {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.instructions-step-text strong {
+  color: var(--accent-cream);
+  font-weight: 600;
+}
+
+.instructions-step-text a {
+  color: var(--accent-peach);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(232, 168, 124, 0.35);
+  transition: color 0.2s;
+}
+
+.instructions-step-text a:hover {
+  color: var(--accent-cream);
 }
