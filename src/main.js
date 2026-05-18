@@ -3,7 +3,7 @@ import { t, setLocale, registerLocale } from './i18n.js';
 import { FULL_DECK, shuffle, renderDeck, updateCardPositions } from './cards.js';
 import { initGestures, getZoneVelocity } from './gestures.js';
 import { getInterpretation } from './ai.js';
-import { initStars, spawnTrail, spawnChargeParticles, spawnInterpretationParticles, updateProgressBar } from './effects.js';
+import { spawnTrail, spawnChargeParticles, spawnInterpretationParticles, updateProgressBar } from './effects.js';
 import { marked } from 'marked';
 import { showToast } from './toast.js';
 import zhStrings from './locales/zh.js';
@@ -640,10 +640,7 @@ window.addEventListener('DOMContentLoaded', () => {
   initInterpretationModal();
   initLocaleSwitcher();
 
-  // Stars background
-  const bgCanvas = document.getElementById('stars-canvas');
-  if (bgCanvas) initStars(bgCanvas);
-
+  // Stars background replaced by <galaxy-background> web component in index.html
   // Start game loop
   requestAnimationFrame(gameLoop);
 

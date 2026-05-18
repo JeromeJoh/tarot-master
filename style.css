@@ -80,32 +80,7 @@ h3 {
   font-family: 'Uncial Antiqua', cursive;
 }
 
-/* ── Background Effects ── */
-#stars-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  opacity: 0.65;
-}
-
-#fog-layer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 45%;
-  background: linear-gradient(
-    to top,
-    rgba(8, 6, 24, 0.95) 0%,
-    rgba(13, 10, 35, 0.6) 50%,
-    transparent 100%
-  );
-  z-index: 1;
-  pointer-events: none;
-}
+/* ── Background Effects — handled by <galaxy-background> web component ── */
 
 /* ── Main Game Container ── */
 #game-container {

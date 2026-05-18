@@ -1,0 +1,4 @@
+{
+  "vertex": "uniform float uTime; varying vec3 vColor; void main(){ vColor=color; vec3 pos=position; pos.y+=sin(uTime+pos.x*2.)*.2; vec4 mvPosition=modelViewMatrix*vec4(pos,1.0); gl_Position=projectionMatrix*mvPosition; gl_PointSize=20./-mvPosition.z;}",
+  "fragment": "varying vec3 vColor; void main(){ float d=distance(gl_PointCoord,vec2(.5)); float a=1.-d*2.; gl_FragColor=vec4(vColor,a);}"
+}

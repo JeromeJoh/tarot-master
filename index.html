@@ -14,14 +14,15 @@
 
     <link rel="stylesheet" href="style.css">
     <!-- Toast web component — must load before main module so customElements.define runs first -->
-    <script src="/src/components/toast.js"></script>
+    <script type="module" src="/src/components/toast.js"></script>
+    <!-- Galaxy background web component (bundles its own Three.js import) -->
+    <script type="module" src="/src/components/galaxy-background.js"></script>
 </head>
 
 <body>
-
-    <!-- Background Canvas -->
-    <canvas id="stars-canvas"></canvas>
-    <div id="fog-layer"></div>
+    <galaxy-background count="25000" branches="6" radius="8" inside-color="#ff9966" outside-color="#5f7cff"
+        style="position:fixed;inset:0;z-index:0;">
+    </galaxy-background>
 
     <!-- UI Layer -->
     <div id="ui-layer">
