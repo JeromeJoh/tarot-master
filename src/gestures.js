@@ -73,17 +73,14 @@ export async function initGestures(videoEl, canvasEl, callbacks) {
       minTrackingConfidence: 0.7,
     });
   } catch (err) {
-    callbacks.onCameraError(err);
-    return;
+    throw err; // propagate to caller's .catch() — onCameraError is called there
   }
 
   // --- Start webcam ---
   try {
-    console.log('initGesture')
     const stream = await navigator.mediaDevices.getUserMedia({
       video: { width: 640, height: 480 },
     });
-    console.log('initGesture', stream)
     videoEl.srcObject = stream;
     await new Promise((resolve) => {
       videoEl.onloadedmetadata = () => {
@@ -92,8 +89,12 @@ export async function initGestures(videoEl, canvasEl, callbacks) {
       };
     });
   } catch (err) {
-    callbacks.onCameraError(err);
-    return;
+    // Stop any partial stream before propagating
+    if (videoEl.srcObject) {
+      videoEl.srcObject.getTracks().forEach(t => t.stop());
+      videoEl.srcObject = null;
+    }
+    throw err; // propagate to caller's .catch() — onCameraError is called there
   }
 
   // --- Set up canvas drawing ---
@@ -121,8 +122,7 @@ export async function initGestures(videoEl, canvasEl, callbacks) {
 
     ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
 
-    // const categoryName = result.gestures[0][0].categoryName;
-    if (result.gestures[0]) console.log('vvvvvvvvvvvvvvvvvvv', result.gestures[0][0].categoryName)
+    if (result.gestures[0]) { /* gesture detected */ }
 
     const hasHand =
       result.landmarks && result.landmarks.length > 0 &&

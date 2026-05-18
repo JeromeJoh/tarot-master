@@ -8,9 +8,13 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Syne:wght@400..800&family=Uncial+Antiqua&display=swap"
+        rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
+    <!-- Toast web component — must load before main module so customElements.define runs first -->
+    <script src="/src/components/toast.js"></script>
 </head>
 
 <body>
@@ -61,8 +65,7 @@
             <!-- IDLE state: click-to-start -->
             <button id="start-btn" class="btn" style="display:none"></button>
             <!-- INTERPRETING state: click-to-read -->
-            <button id="interpret-btn" class="btn"
-                style="display:none; background: linear-gradient(45deg, #d4af37, #f0e68c); color: #000; font-weight: bold; box-shadow: 0 0 20px rgba(212,175,55,0.6);"></button>
+            <button id="interpret-btn" class="btn" style="display:none;"></button>
             <div class="spinner" id="loading-spinner"></div>
         </div>
     </div>
@@ -81,7 +84,7 @@
 
     <!-- Interpretation Modal -->
     <div id="interpretation-modal">
-        <h2 style="color: var(--accent-gold); text-align: center; margin-top: 0;">Revelation</h2>
+        <h2>Revelation</h2>
         <div id="interpretation-content"></div>
         <div style="text-align: center; margin-top: 30px;">
             <button class="btn"
@@ -92,7 +95,7 @@
     <!-- Settings Modal -->
     <div id="settings-modal">
         <div class="settings-content">
-            <h2 style="color: var(--accent-gold);">API Key Configuration (Local Storage)</h2>
+            <h2>API Key Configuration (Local Storage)</h2>
             <p>Enter your DeepSeek API Key to enable AI interpretation.</p>
             <p style="font-size: 0.9rem; color: #aaa;">
                 No key yet? Visit <a href="https://platform.deepseek.com/api_keys" target="_blank">DeepSeek Platform</a>
@@ -106,7 +109,8 @@
         </div>
     </div>
 
-    <div id="toast-container"></div>
+    <!-- Toast web component host — singleton, managed by my-toast -->
+    <my-toast position="top-center" animation="fade-slide"></my-toast>
 
     <script type="module" src="/src/main.js"></script>
 </body>

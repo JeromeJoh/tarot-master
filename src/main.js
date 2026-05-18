@@ -376,6 +376,10 @@ function onCameraError(err) {
 
   const isNotFound = err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError';
 
+  // Fall back to IDLE first so the manual start button becomes visible
+  setState(STATE.IDLE);
+
+  // Then override status text with the specific camera message (must come after setState)
   if (isNotFound) {
     statusText().innerText = t('status.cameraNotFound') || 'No camera found.';
   } else {
@@ -383,7 +387,7 @@ function onCameraError(err) {
     showToast(t('status.cameraPermission'), 'error');
   }
 
-  // Only show retry if it might succeed (not a hardware issue)
+  // Show retry button for recoverable errors (permission denied, not hardware missing)
   const btn = document.getElementById('allow-camera-btn');
   if (btn && !isNotFound) {
     btn.style.display = 'block';
@@ -395,7 +399,11 @@ function onCameraError(err) {
         document.getElementById('webcam-preview'),
         document.getElementById('canvas'),
         { onGesture, onNoHand, onCameraError }
-      );
+      ).then(() => {
+        document.getElementById('webcam-preview').style.display = 'block';
+        document.getElementById('canvas').style.display = 'block';
+        setState(STATE.IDLE);
+      }).catch(onCameraError);
     };
   }
 }
@@ -583,13 +591,10 @@ function initLocaleSwitcher() {
   const switcher = document.getElementById('locale-switcher');
   if (!switcher) return;
 
-  // Registered locales list
   const LOCALES = ['en', 'zh'];
 
-  // Validate and apply stored preference
-  const stored = localStorage.getItem('preferred_locale');
-  const initial = LOCALES.includes(stored) ? stored : 'en';
-  switcher.innerText = t(`locale.${initial}`);
+  // Always start in English
+  switcher.innerText = t('locale.en');
 
   switcher.addEventListener('click', () => {
     const current = localStorage.getItem('preferred_locale') || 'en';
@@ -624,11 +629,11 @@ async function detectCamera() {
 
 // --- Bootstrap ---
 window.addEventListener('DOMContentLoaded', () => {
-  // Register zh locale and apply stored preference
+  // Register zh locale.
+  // Always start in English — locale preference is session-only, not persisted.
   registerLocale('zh', zhStrings);
-  const storedLocale = localStorage.getItem('preferred_locale');
-  const validLocales = ['en', 'zh'];
-  setLocale(validLocales.includes(storedLocale) ? storedLocale : 'en');
+  localStorage.removeItem('preferred_locale');
+  setLocale('en');
 
   localizeUI();
   initSettingsModal();
