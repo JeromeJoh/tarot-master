@@ -7,44 +7,112 @@
   --card-height: 350px;
 
   /* Backgrounds */
-  --bg-dark:        #0d0b1e;   /* deep indigo-black */
-  --bg-surface:     #13102a;   /* slightly lighter surface */
-  --bg-card:        rgba(22, 18, 46, 0.92);
-  --bg-overlay:     rgba(8, 6, 20, 0.88);
+  --bg-dark: #0d0b1e; /* deep indigo-black */
+  --bg-surface: #13102a; /* slightly lighter surface */
+  --bg-card: rgba(22, 18, 46, 0.92);
+  --bg-overlay: rgba(8, 6, 20, 0.88);
 
   /* Accent palette — warm amber + peach + soft violet */
-  --accent-gold:    #c9a84c;   /* warm amber (toned down from harsh yellow) */
-  --accent-peach:   #e8a87c;   /* peach / sacral orange */
-  --accent-rose:    #c97b8a;   /* muted rose */
-  --accent-violet:  #8b7fc7;   /* soft violet */
-  --accent-cream:   #f0e8d5;   /* warm cream — primary text */
+  --accent-gold: #c9a84c; /* warm amber (toned down from harsh yellow) */
+  --accent-peach: #e8a87c; /* peach / sacral orange */
+  --accent-rose: #c97b8a; /* muted rose */
+  --accent-violet: #8b7fc7; /* soft violet */
+  --accent-cream: #f0e8d5; /* warm cream — primary text */
 
   /* Glow variants */
-  --accent-glow:    rgba(201, 168, 76, 0.45);
-  --peach-glow:     rgba(232, 168, 124, 0.35);
-  --violet-glow:    rgba(139, 127, 199, 0.35);
+  --accent-glow: rgba(201, 168, 76, 0.45);
+  --peach-glow: rgba(232, 168, 124, 0.35);
+  --violet-glow: rgba(139, 127, 199, 0.35);
 
   /* Text */
-  --text-primary:   #f0e8d5;
-  --text-secondary: #a89fc0;   /* muted lavender-grey */
-  --text-muted:     #6b6485;
+  --text-primary: #f0e8d5;
+  --text-secondary: #a89fc0; /* muted lavender-grey */
+  --text-muted: #6b6485;
 
   /* Borders */
-  --border-subtle:  rgba(201, 168, 76, 0.2);
-  --border-active:  rgba(201, 168, 76, 0.6);
+  --border-subtle: rgba(201, 168, 76, 0.2);
+  --border-active: rgba(201, 168, 76, 0.6);
 
   /* Spacing scale */
-  --space-xs:  6px;
-  --space-sm:  12px;
-  --space-md:  20px;
-  --space-lg:  32px;
-  --space-xl:  48px;
+  --space-xs: 6px;
+  --space-sm: 12px;
+  --space-md: 20px;
+  --space-lg: 32px;
+  --space-xl: 48px;
 
   /* Radius */
-  --radius-sm:  8px;
-  --radius-md:  16px;
-  --radius-lg:  24px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
   --radius-pill: 50px;
+
+  /* --- Backgrounds --- */
+  /* 深邃的夜空暗紫，用于整体大背景 */
+  --bg-main: #130f26;
+  /* 带有红紫调的暗色渐变过渡色，用于营造画面下方的光晕感 */
+  --bg-gradient-bottom: #25163d;
+  /* 导航栏或卡片容器的深色半透明叠加 */
+  --bg-surface-kv: rgba(19, 15, 38, 0.85);
+
+  /* --- Brand / Accents (The Gold) --- */
+  /* 核心金黄色（主标题），高贵典雅的非高饱和金 */
+  --color-gold-primary: #caa661;
+  /* 次级金黄色（装饰线、副标题），明度稍低，用于拉开视觉层级 */
+  --color-gold-secondary: #a38144;
+  /* 亮部高光金，用于按钮悬停或极其关键的强调元素 */
+  --color-gold-accent: #e5c382;
+
+  /* --- Typography --- */
+  /* 主干文本颜色（浅金色调，非纯白，保证暗色背景下的视觉舒适度） */
+  --text-primary: #e6dfd3;
+  /* 次要说明文本与标签（如图片中 Let's Learn 和底部小字），带有一点冷白感 */
+  --text-secondary: #a69fb2;
+  /* 暗色背景上的互补文本色 */
+  --text-muted: #645c77;
+
+  /* --- Borders & Ornaments --- */
+  /* 四角精细装饰线及星球轨道的浅金色线段 */
+  --border-gold-fine: rgba(202, 166, 97, 0.4);
+  /* 更加隐蔽的次要辅助线线框 */
+  --border-purple-dark: rgba(100, 92, 119, 0.3);
+
+  /* --- Additional Color Variables --- */
+  /* Pure black and white with transparency variants */
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-black-opaque: rgba(0, 0, 0, 0.5);
+  --color-black-very-opaque: rgba(0, 0, 0, 0.8);
+  --color-white-faint: rgba(255, 255, 255, 0.05);
+  --color-white-subtle: rgba(255, 255, 255, 0.06);
+  --color-white-light: rgba(255, 255, 255, 0.1);
+
+  /* Deep card background colors */
+  --color-deep-dark-1: #110e28;
+  --color-deep-dark-2: #0f0c24;
+  --color-very-dark-bg: rgba(5, 4, 16, 0.82);
+  --color-very-dark-bg-modal: rgba(5, 4, 16, 0.85);
+
+  /* Gray/neutral tones */
+  --color-gray-500: #555555;
+
+  /* Transparency variants for existing colors */
+  --color-gold-faint: rgba(201, 168, 76, 0.1);
+  --color-gold-subtle: rgba(201, 168, 76, 0.12);
+  --color-gold-light: rgba(201, 168, 76, 0.15);
+  --color-gold-medium: rgba(201, 168, 76, 0.2);
+  --color-gold-strong: rgba(201, 168, 76, 0.25);
+  --color-gold-very-strong: rgba(201, 168, 76, 0.45);
+
+  --color-peach-light: rgba(232, 168, 124, 0.15);
+  --color-peach-medium: rgba(232, 168, 124, 0.2);
+  --color-peach-subtle: rgba(232, 168, 124, 0.35);
+  --color-peach-strong: rgba(232, 168, 124, 0.4);
+
+  --color-bg-dark-subtle: rgba(13, 10, 35, 0.4);
+  --color-bg-dark-light: rgba(13, 10, 35, 0.45);
+  --color-bg-dark-medium: rgba(13, 10, 35, 0.55);
+  --color-bg-dark-strong: rgba(13, 10, 35, 0.6);
+  --color-bg-dark-very-strong: rgba(13, 10, 35, 0.7);
 }
 
 /* ── Reset & Base ── */
@@ -55,10 +123,33 @@ html {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: var(--bg-dark);
+  background: linear-gradient(
+    180deg,
+    var(--bg-main) 0%,
+    var(--bg-gradient-bottom) 100%
+  );
+  box-shadow: inset 0 0 100px var(--color-black-very-opaque); /* 营造四周向内聚拢的暗角 */
   font-family: 'Syne', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: var(--text-primary);
   user-select: none;
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  /* 控制金线向内缩进的距离，数字越大，向内缩得越多 */
+  inset: 16px;
+
+  /* 边框设计：使用方案一的细金线变量，1px 宽度最显精致 */
+  border: 1px solid var(--border-gold-fine);
+  /* 带圆角的金线 */
+  border-radius: 12px;
+
+  /* 关键：防止金线挡住内部文字或按钮的点击事件 */
+  pointer-events: none;
+
+  /* 可选拓展：为金线增加一层极其微弱的金色氛围灯效果 */
+  box-shadow: 0 0 8px var(--color-gold-faint);
 }
 
 /* ── Typography ── */
@@ -75,26 +166,27 @@ h1 {
 }
 
 /* ── Intro title — two words side-by-side with a light-gap between ── */
-#header h1 {
+header h1 {
   display: flex;
   align-items: baseline;
   justify-content: center;
   /* Gap between "Mystic" and "Tarot" — the background glow bleeds through here */
   gap: 0.55em;
-  overflow: hidden; /* clip the slide-in animation */
+  /* overflow: hidden; */
   line-height: 1.1;
   position: relative;
+  vertical-align: middle;
 }
 
 .word-mystic,
 .word-tarot {
   display: inline-block;
   /* Each word clips to its own box so the slide animation is clean */
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 /* Light-gap glow between the two words — pseudo-element on the h1 */
-#header h1::before {
+header h1::before {
   content: '';
   position: absolute;
   left: 50%;
@@ -118,7 +210,7 @@ h1 {
 }
 
 /* Hide the gap glow once the header is in collapsed/badge state */
-#header.collapsed h1::before {
+header.collapsed h1::before {
   opacity: 0;
 }
 
@@ -203,10 +295,10 @@ h3 {
 .card-back {
   background: repeating-linear-gradient(
     45deg,
-    #110e28,
-    #110e28 10px,
-    #0f0c24 10px,
-    #0f0c24 20px
+    var(--color-deep-dark-1),
+    var(--color-deep-dark-1) 10px,
+    var(--color-deep-dark-2) 10px,
+    var(--color-deep-dark-2) 20px
   );
   display: flex;
   align-items: center;
@@ -216,19 +308,19 @@ h3 {
 .card-back::after {
   content: '✦';
   font-size: 3rem;
-  color: rgba(201, 168, 76, 0.25);
-  border: 1px solid rgba(201, 168, 76, 0.2);
+  color: var(--color-gold-strong);
+  border: 1px solid var(--color-gold-medium);
   border-radius: 50%;
   width: 64px;
   height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 20px rgba(201, 168, 76, 0.1);
+  box-shadow: 0 0 20px var(--color-gold-faint);
 }
 
 .card-front {
-  background-color: #fff;
+  background-color: var(--color-white);
   transform: rotateY(180deg);
   background-size: cover;
   background-position: center;
@@ -254,7 +346,7 @@ h3 {
 #header {
   text-align: center;
   margin-top: var(--space-lg);
-  background: rgba(13, 10, 35, 0.45);
+  background: var(--color-bg-dark-light);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-subtle);
@@ -280,7 +372,12 @@ h3 {
   display: block;
   width: 60px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent-gold),
+    transparent
+  );
   margin: var(--space-xs) auto 0;
   /* ::after on a flex container won't render inline — use a separate element approach */
   /* This rule is kept for reference but the flex layout means ::after is a flex item */
@@ -317,7 +414,7 @@ h3 {
 
 /* ── Buttons ── */
 .btn {
-  background: rgba(13, 10, 35, 0.6);
+  background: var(--color-bg-dark-strong);
   border: 1px solid var(--border-active);
   color: var(--accent-cream);
   padding: 11px 32px;
@@ -333,7 +430,11 @@ h3 {
 }
 
 .btn:hover {
-  background: linear-gradient(135deg, rgba(201, 168, 76, 0.2), rgba(232, 168, 124, 0.15));
+  background: linear-gradient(
+    135deg,
+    var(--color-gold-light),
+    var(--color-peach-medium)
+  );
   border-color: var(--accent-peach);
   color: var(--accent-cream);
   box-shadow:
@@ -392,19 +493,22 @@ h3 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-white-faint);
   border: 1px solid var(--border-subtle);
   border-radius: 50%;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
   padding: 0;
   /* Draw × via pseudo-elements when no SVG child is present */
   position: relative;
 }
 
 .modal-close-btn:hover {
-  background: rgba(201, 168, 76, 0.12);
+  background: var(--color-gold-subtle);
   border-color: var(--accent-gold);
   color: var(--accent-cream);
 }
@@ -419,8 +523,12 @@ h3 {
   background: currentColor;
   border-radius: 1px;
 }
-.modal-close-btn:not(:has(svg))::before { transform: rotate(45deg); }
-.modal-close-btn:not(:has(svg))::after  { transform: rotate(-45deg); }
+.modal-close-btn:not(:has(svg))::before {
+  transform: rotate(45deg);
+}
+.modal-close-btn:not(:has(svg))::after {
+  transform: rotate(-45deg);
+}
 
 /* Scrollable body — sits below the sticky header */
 .modal-body {
@@ -428,7 +536,7 @@ h3 {
   overflow-x: hidden;
   scrollbar-gutter: stable;
   flex: 1 1 auto; /* fill remaining height in a flex-column shell */
-  min-height: 0;  /* required for flex children to shrink below content size */
+  min-height: 0; /* required for flex children to shrink below content size */
 }
 
 /* ── Interpretation Modal ── */
@@ -443,9 +551,6 @@ h3 {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  overflow: hidden; /* clips scrollbar to rounded corners */
-  display: none;
-  /* Use flex-column so header stays fixed and body fills the rest */
   flex-direction: column;
   padding: var(--space-lg);
   box-sizing: border-box;
@@ -460,8 +565,8 @@ h3 {
 }
 
 #interpretation-modal.open,
-#interpretation-modal[style*="display: block"],
-#interpretation-modal[style*="display:block"] {
+#interpretation-modal[style*='display: block'],
+#interpretation-modal[style*='display:block'] {
   display: flex;
 }
 
@@ -488,13 +593,12 @@ h3 {
 
 /* ── Settings Modal ── */
 #settings-modal {
-  display: none;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(5, 4, 16, 0.85);
+  background: var(--color-very-dark-bg-modal);
   z-index: 3000;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -546,13 +650,15 @@ h3 {
   width: 80%;
   padding: 11px var(--space-sm);
   margin: var(--space-md) 0;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(201, 168, 76, 0.25);
+  background: var(--color-white-faint);
+  border: 1px solid var(--color-gold-strong);
   color: var(--text-primary);
   border-radius: var(--radius-sm);
   font-size: 0.95rem;
   font-family: 'Syne', sans-serif;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
 }
 
 .settings-content input:focus {
@@ -564,7 +670,7 @@ h3 {
 .settings-content a {
   color: var(--accent-peach);
   text-decoration: none;
-  border-bottom: 1px solid rgba(232, 168, 124, 0.4);
+  border-bottom: 1px solid var(--color-peach-subtle);
   transition: color 0.2s;
 }
 
@@ -582,9 +688,9 @@ h3 {
 }
 
 #api-token {
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid #555;
-  color: white;
+  background: var(--color-black-opaque);
+  border: 1px solid var(--color-gray-500);
+  color: var(--color-white);
   padding: 5px 10px;
   border-radius: var(--radius-sm);
   width: 150px;
@@ -621,7 +727,7 @@ h3 {
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  color: rgba(201, 168, 76, 0.45);
+  color: var(--color-gold-very-strong);
   opacity: 0;
   transition: opacity 0.3s;
   pointer-events: none;
@@ -655,7 +761,7 @@ h3 {
 .guide-icon {
   width: 60px;
   height: 60px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--color-white-subtle);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -666,7 +772,7 @@ h3 {
 
 .guide-icon.active {
   border-color: var(--accent-gold);
-  background: rgba(201, 168, 76, 0.15);
+  background: var(--color-gold-light);
   box-shadow: 0 0 15px var(--accent-glow);
   transform: scale(1.2);
 }
@@ -782,19 +888,19 @@ h3 {
 .picked-slot {
   width: 100px;
   height: 175px;
-  border: 1px dashed rgba(201, 168, 76, 0.25);
+  border: 1px dashed var(--color-gold-strong);
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(13, 10, 35, 0.4);
+  background: var(--color-bg-dark-subtle);
   transition: all 0.5s;
 }
 
 .picked-slot.filled {
   border-style: solid;
   border-color: var(--accent-gold);
-  background: rgba(13, 10, 35, 0.7);
+  background: var(--color-bg-dark-very-strong);
   box-shadow: 0 0 16px var(--accent-glow);
 }
 
@@ -821,7 +927,7 @@ h3 {
 
 /* ── Loading Spinner ── */
 .spinner {
-  border: 3px solid rgba(255, 255, 255, 0.08);
+  border: 3px solid var(--color-white-light);
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -832,13 +938,18 @@ h3 {
 }
 
 @keyframes spin {
-  0%   { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* ── Button pulse animation ── */
 @keyframes softPulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow:
       0 0 12px var(--accent-glow),
       0 0 24px var(--peach-glow);
@@ -860,7 +971,11 @@ h3 {
 }
 
 #interpret-btn {
-  background: linear-gradient(135deg, rgba(201, 168, 76, 0.25), rgba(232, 168, 124, 0.2));
+  background: linear-gradient(
+    135deg,
+    var(--color-gold-light),
+    var(--color-peach-light)
+  );
   border-color: var(--accent-peach);
   color: var(--accent-cream);
   font-weight: 600;
@@ -892,7 +1007,7 @@ h3 {
   height: 36px;
   min-width: 36px;
   padding: 0 12px;
-  background: rgba(13, 10, 35, 0.55);
+  background: var(--color-bg-dark-medium);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-pill);
   color: var(--text-secondary);
@@ -903,7 +1018,11 @@ h3 {
   cursor: pointer;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  transition: color 0.25s, border-color 0.25s, background 0.25s, box-shadow 0.25s;
+  transition:
+    color 0.25s,
+    border-color 0.25s,
+    background 0.25s,
+    box-shadow 0.25s;
   /* Fixed min-width so EN↔中文 doesn't resize */
   min-width: 64px;
   text-align: center;
@@ -912,7 +1031,7 @@ h3 {
 .top-bar-btn:hover {
   color: var(--accent-cream);
   border-color: var(--accent-gold);
-  background: rgba(201, 168, 76, 0.1);
+  background: var(--color-gold-light);
   box-shadow: 0 0 10px var(--accent-glow);
 }
 
@@ -950,12 +1069,12 @@ h3 {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(201, 168, 76, 0.2);
+  background: var(--color-gold-medium);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(201, 168, 76, 0.4);
+  background: var(--color-gold-strong);
 }
 
 /* ── Instructions FAB (bottom-right) ── */
@@ -972,10 +1091,9 @@ h3 {
 
 /* ── Instructions Modal overlay ── */
 #instructions-modal {
-  display: none;
   position: fixed;
   inset: 0;
-  background: rgba(5, 4, 16, 0.82);
+  background: var(--color-very-dark-bg);
   z-index: 3000;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -1034,7 +1152,7 @@ h3 {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(201, 168, 76, 0.1);
+  background: var(--color-gold-faint);
   border: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
@@ -1073,7 +1191,7 @@ h3 {
 .instructions-step-text a {
   color: var(--accent-peach);
   text-decoration: none;
-  border-bottom: 1px solid rgba(232, 168, 124, 0.35);
+  border-bottom: 1px solid var(--color-peach-subtle);
   transition: color 0.2s;
 }
 

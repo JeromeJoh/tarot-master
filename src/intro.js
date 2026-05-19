@@ -23,10 +23,10 @@ const gsap = window.gsap;
  */
 export function playIntro() {
   return new Promise((resolve) => {
-    const header = document.getElementById('header');
+    const header = document.querySelector('header');
     const mystic = header?.querySelector('.word-mystic');
     const tarot = header?.querySelector('.word-tarot');
-    const subItems = header?.querySelectorAll('#status-text, #charge-progress-container');
+    const subItems = document.querySelectorAll('#status-text, #charge-progress-container');
 
     if (!gsap || !header || !mystic || !tarot) {
       resolve();
@@ -64,6 +64,10 @@ export function playIntro() {
       ease: 'power3.out',
     }, 0.08); // slight stagger so they don't land at exactly the same frame
 
+    tl.to('header h1', {
+      scale: 0.8,
+    }, '-=0.5'); // header itself doesn't move but we can use it as a common timeline for sequencing
+
     // Fade in status text after title settles
     tl.to(subItems, {
       opacity: 1,
@@ -88,7 +92,7 @@ export function playHeaderCollapse() {
 
     const header = document.getElementById('header');
     const uiLayer = document.getElementById('ui-layer');
-    const subItems = header?.querySelectorAll('#status-text, #charge-progress-container');
+    const subItems = document.querySelectorAll('#status-text, #charge-progress-container');
     const controls = document.getElementById('controls');
 
     if (!header) { resolve(); return; }

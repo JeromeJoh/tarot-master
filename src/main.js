@@ -187,7 +187,7 @@ function triggerInterpretation() {
   const modal = interpretModal();
   const content = interpretContent();
   content.innerHTML = '';
-  modal.style.display = 'block';
+  modal?.showModal();
 
   if (loadingSpinner()) loadingSpinner().style.display = 'block';
 
@@ -200,8 +200,8 @@ function triggerInterpretation() {
       fullText += chunk;
       content.innerHTML = marked.parse(fullText);
       // Auto-scroll to bottom as content streams in
-      const modal = interpretModal();
-      if (modal) modal.scrollTop = modal.scrollHeight;
+      const modalBody = interpretModal()?.querySelector('.modal-body');
+      if (modalBody) modalBody.scrollTop = modalBody.scrollHeight;
     },
     () => {
       if (loadingSpinner()) loadingSpinner().style.display = 'none';
@@ -454,25 +454,17 @@ function initInstructionsModal() {
     const titleEl = modal.querySelector('h2');
     if (titleEl) titleEl.innerText = t('instructions.title');
     if (closeBtn) closeBtn.innerText = t('instructions.close');
-    modal.classList.add('open');
+    modal.showModal();
   }
 
   function closeModal() {
-    modal.classList.remove('open');
+    modal.close();
   }
 
   btn.addEventListener('click', openModal);
   closeBtn?.addEventListener('click', closeModal);
 
-  // Close on backdrop click
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal();
-  });
-
-  // Close on Escape
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-  });
+  // Dialog element automatically handles Escape key
 }
 function initSettingsModal() {
   const settingsBtn = document.getElementById('settings-btn');
@@ -494,16 +486,17 @@ function initSettingsModal() {
 
   // Pre-populate on open
   settingsBtn?.addEventListener('click', () => {
+    console.log('Opening settings modal');
     const stored = localStorage.getItem('deepseek_token');
     if (tokenInput) tokenInput.value = stored ?? '';
-    if (settingsModal) settingsModal.style.display = 'block';
+    if (settingsModal) settingsModal.showModal();
   });
 
   // Save
   saveBtn?.addEventListener('click', () => {
     const val = tokenInput?.value.trim() ?? '';
     localStorage.setItem('deepseek_token', val);
-    if (settingsModal) settingsModal.style.display = 'none';
+    if (settingsModal) settingsModal.close();
     showToast(t('toast.settingsSaved'), 'success', 2000);
 
     // If in INTERPRETING state, update status
@@ -514,7 +507,7 @@ function initSettingsModal() {
 
   // Close
   closeBtn?.addEventListener('click', () => {
-    if (settingsModal) settingsModal.style.display = 'none';
+    if (settingsModal) settingsModal.close();
   });
 }
 
@@ -527,7 +520,7 @@ function initInterpretationModal() {
   const closeBtn = modal?.querySelector('button');
   if (closeBtn) {
     closeBtn.innerText = t('modal.close');
-    closeBtn.onclick = () => { if (modal) modal.style.display = 'none'; };
+    closeBtn.onclick = () => { if (modal) modal.close(); };
   }
 }
 
