@@ -134,7 +134,8 @@ html {
   user-select: none;
 }
 
-body::before {
+body::before,
+body::after {
   content: '';
   position: absolute;
   /* 控制金线向内缩进的距离，数字越大，向内缩得越多 */
@@ -150,6 +151,13 @@ body::before {
 
   /* 可选拓展：为金线增加一层极其微弱的金色氛围灯效果 */
   box-shadow: 0 0 8px var(--color-gold-faint);
+}
+
+body::after {
+  /* 控制金线向内缩进的距离，数字越大，向内缩得越多 */
+  inset: 24px;
+  border: 0.5px solid var(--border-gold-fine);
+  border-radius: 8px;
 }
 
 /* ── Typography ── */
@@ -364,23 +372,6 @@ h3 {
 
 #header h1 {
   font-size: clamp(1.6rem, 4vw, 2.6rem);
-}
-
-/* Decorative divider line under h1 — only in expanded state */
-#header:not(.collapsed) h1::after {
-  content: '';
-  display: block;
-  width: 60px;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--accent-gold),
-    transparent
-  );
-  margin: var(--space-xs) auto 0;
-  /* ::after on a flex container won't render inline — use a separate element approach */
-  /* This rule is kept for reference but the flex layout means ::after is a flex item */
 }
 
 /* In collapsed badge mode the decorative line is hidden */
