@@ -13,6 +13,8 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png"
+        href="https://icons.iconarchive.com/icons/icons8/windows-8/128/Astrology-Crystal-Ball-icon.png">
     <!-- GSAP for intro animation -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <!-- Toast web component — must load before main module so customElements.define runs first -->
@@ -58,6 +60,32 @@
             </h1>
         </header>
 
+        <svg class="border-svg" viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+
+            <path class="animated-path" d="
+                M 40,25 
+                L 760,25 
+                A 15,15 0 0 1 775,40 
+                L 775,180 
+                L 755,180 L 755,170 L 775,170 L 775,200 L 765,210 L 775,220 L 775,410 
+                A 15,15 0 0 1 760,425 
+                L 40,425 
+                A 15,15 0 0 1 25,410 
+                L 25,220 L 35,210 L 25,200 L 25,170 L 45,170 L 45,180 L 25,180
+                L 25,40 
+                A 15,15 0 0 1 40,25 Z
+            " />
+
+            <g class="inner-deco">
+                <path d="M 45,45 L 65,65 M 65,45 L 45,65 M 55,40 L 55,70 M 40,55 L 70,55" />
+                <circle cx="55" cy="55" r="4" />
+                <path d="M 735,45 L 755,65 M 755,45 L 735,65 M 745,40 L 745,70 M 730,55 L 760,55" />
+                <circle cx="745" cy="745" r="4" />
+                <path d="M 45,385 L 65,405 M 65,385 L 45,405 M 55,380 L 55,410 M 40,395 L 70,395" />
+                <path d="M 735,385 L 755,405 M 755,385 L 735,405 M 745,380 L 745,410 M 730,395 L 760,395" />
+            </g>
+        </svg>
+
         <!-- ── Main content area ── -->
         <main id="game-ui">
             <!-- ── Status section ── -->
@@ -98,7 +126,7 @@
         </main>
     </div>
 
-    <video id="webcam-preview" playsinline>
+    <video id="webcam-preview" style="display: none;" playsinline>
     </video>
     <canvas id="canvas"></canvas>
 

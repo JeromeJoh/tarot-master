@@ -113,6 +113,9 @@
   --color-bg-dark-medium: rgba(13, 10, 35, 0.55);
   --color-bg-dark-strong: rgba(13, 10, 35, 0.6);
   --color-bg-dark-very-strong: rgba(13, 10, 35, 0.7);
+
+  --color-gold: #caa661;
+  --color-gold-glow: rgba(202, 166, 97, 0.4);
 }
 
 /* ── Reset & Base ── */
@@ -1183,4 +1186,78 @@ header.collapsed h1::after {
 
 .instructions-step-text a:hover {
   color: var(--accent-cream);
+}
+
+/* SVG 边框画布：绝对定位并撑满容器 */
+.border-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* 防止阻挡容器内元素的点击事件 */
+}
+
+/* 核心动画路径 */
+.animated-path {
+  stroke: var(--color-gold);
+  stroke-width: 1.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  /* 关键点 1：虚线阵列。
+               这里 2600 是预估的整条复杂路径的总长度。
+               dasharray: 线条长度 空白长度 */
+  stroke-dasharray: 2600;
+
+  /* 关键点 2：初始状态将偏移量设为总长，使其完全隐藏 */
+  stroke-dashoffset: 2600;
+
+  /* 关键点 3：触发 CSS 生长动画 */
+  animation: borderGrow 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+
+  /* 配合滤镜增加金色霓虹微光 */
+  filter: drop-shadow(0 0 3px var(--color-gold-glow));
+}
+
+/* 内部辅助装饰：让它们延迟出现，形成层级感 */
+.inner-deco {
+  stroke: var(--color-gold);
+  stroke-width: 1;
+  fill: none;
+  opacity: 0;
+  animation: fadeIn 1.5s ease forwards;
+  animation-delay: 3s; /* 在大边框绘制完后淡入 */
+}
+
+/* 文本内容延迟淡入 */
+.content {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  color: var(--color-gold);
+  opacity: 0;
+  transform: translateY(10px);
+  animation: contentUp 1.5s ease forwards;
+  animation-delay: 2.5s;
+}
+
+/* --- 动画关键帧 --- */
+@keyframes borderGrow {
+  to {
+    stroke-dashoffset: 0; /* 偏移量归零，线条完全展现 */
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 0.4;
+  }
+}
+
+@keyframes contentUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
