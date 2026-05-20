@@ -29,29 +29,29 @@
     <!-- UI Layer -->
     <div id="ui-layer">
 
-    <!-- ── Top-right control bar ── -->
-    <nav id="top-bar" role="navigation" aria-label="Top controls">
-      <!-- Allow camera (shown on permission error) -->
-      <button id="allow-camera-btn" class="top-bar-btn" style="display:none" aria-label="Allow camera access">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-          <path
-            d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z" />
-        </svg>
-      </button>
-      <!-- Language switcher -->
-      <button id="locale-switcher" class="top-bar-btn" aria-label="Switch language">EN</button>
-      <!-- Settings / API key -->
-      <button id="settings-btn" class="top-bar-btn" aria-label="Open settings">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-          <path
-            d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
-        </svg>
-      </button>
-    </nav>
+        <!-- ── Top-right control bar ── -->
+        <nav id="top-bar" role="navigation" aria-label="Top controls">
+            <!-- Allow camera (shown on permission error) -->
+            <button id="allow-camera-btn" class="top-bar-btn" style="display:none" aria-label="Allow camera access">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                    <path
+                        d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z" />
+                </svg>
+            </button>
+            <!-- Language switcher -->
+            <button id="locale-switcher" class="top-bar-btn" aria-label="Switch language">EN</button>
+            <!-- Settings / API key -->
+            <button id="settings-btn" class="top-bar-btn" aria-label="Open settings">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                    <path
+                        d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                </svg>
+            </button>
+        </nav>
 
         <div id="hand-cursor" aria-hidden="true"></div>
         <div id="charge-ring" aria-hidden="true"></div>
-        <header id="header" role="banner">
+        <header role="banner">
             <h1>
                 <span class="word-mystic">Mystic</span>
                 <span class="word-tarot">Tarot</span>
@@ -81,7 +81,8 @@
                     <div id="zone-right" class="guide-zone" aria-label="Swipe left to scroll right">⬅ Swipe Left</div>
                     <div id="zone-center" class="guide-zone" aria-label="Make a fist to select card">
                         <div class="guide-icon" id="icon-select">✊</div>
-                        <div style="font-size: 1rem; margin-top: 10px; text-shadow: 0 0 5px black;">Make a fist to select</div>
+                        <div style="font-size: 1rem; margin-top: 10px; text-shadow: 0 0 5px black;">Make a fist to
+                            select</div>
                     </div>
                 </div>
             </section>
@@ -139,12 +140,14 @@
             <div class="modal-body">
                 <p>Enter your DeepSeek API Key to enable AI interpretation.</p>
                 <p style="font-size: 0.9rem; color: #aaa;">
-                    No key yet? Visit <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener noreferrer">DeepSeek
+                    No key yet? Visit <a href="https://platform.deepseek.com/api_keys" target="_blank"
+                        rel="noopener noreferrer">DeepSeek
                         Platform</a>
                     to get one.
                 </p>
                 <input type="password" id="api-token-input" placeholder="sk-..." aria-label="DeepSeek API token">
-                <div id="token-status" role="status" style="font-size: 0.8rem; margin: 10px 0; min-height: 1.2em;"></div>
+                <div id="token-status" role="status" style="font-size: 0.8rem; margin: 10px 0; min-height: 1.2em;">
+                </div>
                 <button id="save-settings-btn" class="btn">Save</button>
             </div>
         </div>
