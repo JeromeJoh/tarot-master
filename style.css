@@ -979,8 +979,8 @@ header.collapsed h1::after {
 /* ── Top-right control bar ── */
 #top-bar {
   position: absolute;
-  top: var(--space-md);
-  right: var(--space-md);
+  top: var(--space-lg);
+  right: var(--space-lg);
   display: flex;
   align-items: center;
   gap: var(--space-xs);
@@ -1010,7 +1010,7 @@ header.collapsed h1::after {
   transition:
     color 0.25s,
     border-color 0.25s,
-    background 0.25s,
+    background-color 0.25s,
     box-shadow 0.25s;
   /* Fixed min-width so EN↔中文 doesn't resize */
   min-width: 64px;
@@ -1069,8 +1069,8 @@ header.collapsed h1::after {
 /* ── Instructions FAB (bottom-right) ── */
 .instructions-fab {
   position: fixed;
-  bottom: var(--space-md);
-  right: var(--space-md);
+  bottom: var(--space-lg);
+  right: var(--space-lg);
   z-index: 1000;
   gap: 6px;
   /* Override top-bar-btn min-width for this compact button */

@@ -484,7 +484,6 @@ function initInstructionsModal() {
     buildSteps();
     const titleEl = modal.querySelector('h2');
     if (titleEl) titleEl.innerText = t('instructions.title');
-    if (closeBtn) closeBtn.innerText = t('instructions.close');
     modal.showModal();
   }
 
@@ -513,7 +512,6 @@ function initSettingsModal() {
   if (descEls?.[1]) descEls[1].innerHTML = t('settings.hint');
 
   if (saveBtn) saveBtn.innerText = t('settings.save');
-  if (closeBtn) closeBtn.innerText = t('settings.close');
 
   // Pre-populate on open
   settingsBtn?.addEventListener('click', () => {
@@ -624,8 +622,6 @@ function localizeUI() {
   }
   const saveBtn = el('save-settings-btn');
   if (saveBtn) saveBtn.innerText = t('settings.save');
-  const closeSettingsBtn = el('close-settings-btn');
-  if (closeSettingsBtn) closeSettingsBtn.innerText = t('settings.close');
 
   // Interpretation modal
   const modal = interpretModal();
