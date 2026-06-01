@@ -22,9 +22,10 @@
 </head>
 
 <body>
-    <!-- <galaxy-background count="25000" branches="6" radius="8" inside-color="#ff9966" outside-color="#5f7cff"
-        style="position:fixed;inset:0;z-index:0;">
-    </galaxy-background> -->
+    <shader-background shader-src="/shaders/galaxy.frag" uniforms='{
+    "uSpeed":0.3,
+    "uColor":"#ffcc88"
+  }'></shader-background>
 
     <!-- UI Layer -->
     <div id="ui-layer">
