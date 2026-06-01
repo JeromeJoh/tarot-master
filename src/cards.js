@@ -1,4 +1,6 @@
 // --- Card Data & Configuration ---
+import gsap from 'gsap';
+
 const ASSETS_PATH = 'assets/tarot/pkt/'
 
 // Helper to generate full card list
@@ -191,39 +193,47 @@ export function updateCardPositions(currentIndex, deck, pickedCards) {
  * @param {Array} pickedCards - Array of picked cards with position labels
  */
 export function updatePickedPositions(pickedCards) {
-  const cards = document.querySelectorAll('.card-wrapper')
-  const width = window.innerWidth
+  const cards = document.querySelectorAll('.card-wrapper');
+  const width = window.innerWidth;
 
   // Responsive spacing for picked cards
-  const spread = Math.min(width * 0.3, 400)
-  const positions = [-spread, 0, spread]
+  const spread = Math.min(width * 0.3, 400);
+  const positions = [-spread, 0, spread];
 
   cards.forEach((card, i) => {
-    const x = positions[i]
+    const x = positions[i];
 
     // Reveal animation with staggered timing
     if (i < pickedCards.length) {
-      setTimeout(() => {
-        card.classList.add('flipped')
-      }, i * 500 + 500)
+      const cardInner = card.querySelector('.card-inner');
+      gsap.delayedCall(i * 0.5 + 0.5, () => {
+        if (cardInner) {
+          gsap.to(cardInner, {
+            rotationY: 180,
+            duration: 0.8,
+            ease: 'power2.inOut'
+          });
+        }
+        card.classList.add('flipped');
+      });
     }
 
-    card.style.transform = `translateX(${x}px) scale(1.1)`
-    card.style.zIndex = 10
+    card.style.transform = `translateX(${x}px) scale(1.1)`;
+    card.style.zIndex = 10;
 
     // Add position label if not exists
     if (!card.querySelector('.label') && i < pickedCards.length) {
-      const label = document.createElement('div')
-      label.className = 'label'
-      label.innerText = pickedCards[i].position
-      label.style.position = 'absolute'
-      label.style.bottom = '-40px'
-      label.style.width = '100%'
-      label.style.textAlign = 'center'
-      label.style.color = '#d4af37'
-      label.style.textShadow = '0 0 5px black'
-      label.style.fontSize = '1.2rem'
-      card.appendChild(label)
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.innerText = pickedCards[i].position;
+      label.style.position = 'absolute';
+      label.style.bottom = '-40px';
+      label.style.width = '100%';
+      label.style.textAlign = 'center';
+      label.style.color = '#d4af37';
+      label.style.textShadow = '0 0 5px black';
+      label.style.fontSize = '1.2rem';
+      card.appendChild(label);
     }
-  })
+  });
 }

@@ -4,6 +4,7 @@ import { FULL_DECK, shuffle, renderDeck, updateCardPositions } from './cards.js'
 import { initGestures, getZoneVelocity } from './gestures.js';
 import { getInterpretation } from './ai.js';
 import { spawnTrail, spawnChargeParticles, spawnInterpretationParticles, updateProgressBar } from './effects.js';
+import { startButtonPulse, stopButtonPulse, enableSettingsButtonRotate, animateMiniCardFlyIn, startSpinner, stopSpinner, animateGuideIcon, resetGuideIcon } from './animations.js';
 import { marked } from 'marked';
 import { showToast } from './toast.js';
 import zhStrings from './locales/zh.js';
@@ -73,12 +74,14 @@ function setState(newState) {
       if (startBtn) {
         startBtn.style.display = 'block';
         startBtn.innerText = t('btn.startReading');
+        startButtonPulse();
       }
       break;
 
     case STATE.INTRO:
       statusText().innerText = t('status.spinning');
       pickedZone().style.display = 'none';
+      if (startBtn) stopButtonPulse();
       break;
 
     case STATE.PICKING:
@@ -109,6 +112,7 @@ function setState(newState) {
       if (interpretBtn) {
         interpretBtn.style.display = 'block';
         interpretBtn.innerText = t('btn.interpretReading');
+        startButtonPulse();
       }
       break;
     }
@@ -168,6 +172,7 @@ function selectCard() {
     miniCard.className = 'mini-card';
     miniCard.innerHTML = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2rem;color:rgba(212,175,55,0.5);">✦</div>`;
     slot.appendChild(miniCard);
+    animateMiniCardFlyIn(miniCard);
   }
 
   if (pickedCards.length === 3) {
@@ -189,7 +194,11 @@ function triggerInterpretation() {
   content.innerHTML = '';
   modal?.showModal();
 
-  if (loadingSpinner()) loadingSpinner().style.display = 'block';
+  const spinner = loadingSpinner();
+  if (spinner) {
+    spinner.style.display = 'block';
+    startSpinner(spinner);
+  }
 
   let fullText = '';
 
@@ -204,11 +213,17 @@ function triggerInterpretation() {
       if (modalBody) modalBody.scrollTop = modalBody.scrollHeight;
     },
     () => {
-      if (loadingSpinner()) loadingSpinner().style.display = 'none';
+      if (spinner) {
+        stopSpinner(spinner);
+        spinner.style.display = 'none';
+      }
       statusText().innerText = t('status.readingComplete');
     },
     (err) => {
-      if (loadingSpinner()) loadingSpinner().style.display = 'none';
+      if (spinner) {
+        stopSpinner(spinner);
+        spinner.style.display = 'none';
+      }
       const msg = t('error.apiFailure').replace('{message}', err.message);
       showToast(msg, 'error');
       console.error(err);
@@ -408,19 +423,35 @@ function onCameraError(err) {
 // --- Zone highlight helpers ---
 function highlightDirection(dir) {
   resetHighlights();
-  if (dir === 'left') document.getElementById('zone-left')?.classList.add('active');
-  if (dir === 'right') document.getElementById('zone-right')?.classList.add('active');
+  if (dir === 'left') {
+    const el = document.getElementById('zone-left');
+    if (el) el.classList.add('active');
+  }
+  if (dir === 'right') {
+    const el = document.getElementById('zone-right');
+    if (el) el.classList.add('active');
+  }
   if (dir === 'select') {
-    document.getElementById('zone-center')?.classList.add('active');
-    document.getElementById('icon-select')?.classList.add('active');
+    const centerEl = document.getElementById('zone-center');
+    const iconEl = document.getElementById('icon-select');
+    if (centerEl) centerEl.classList.add('active');
+    if (iconEl) {
+      iconEl.classList.add('active');
+      animateGuideIcon(iconEl);
+    }
   }
 }
 
 function resetHighlights() {
   document.getElementById('zone-left')?.classList.remove('active');
   document.getElementById('zone-right')?.classList.remove('active');
-  document.getElementById('zone-center')?.classList.remove('active');
-  document.getElementById('icon-select')?.classList.remove('active');
+  const centerEl = document.getElementById('zone-center');
+  if (centerEl) centerEl.classList.remove('active');
+  const iconEl = document.getElementById('icon-select');
+  if (iconEl) {
+    iconEl.classList.remove('active');
+    resetGuideIcon(iconEl);
+  }
 }
 
 // --- Instructions Modal ---
@@ -687,6 +718,7 @@ window.addEventListener('DOMContentLoaded', () => {
   initSettingsModal();
   initInterpretationModal();
   initLocaleSwitcher();
+  enableSettingsButtonRotate();
 
   // Stars background replaced by <galaxy-background> web component in index.html
   // Start game loop

@@ -11,8 +11,7 @@
  *   status / progress / controls fade out, only the h1 title remains.
  */
 
-// GSAP is loaded as a plain <script> tag before this module runs.
-const gsap = window.gsap;
+import gsap from 'gsap';
 
 // ─── CSS state classes ────────────────────────────────────────────────────────
 
@@ -28,7 +27,7 @@ export function playIntro() {
     const tarot = header?.querySelector('.word-tarot');
     const subItems = document.querySelectorAll('#status-text, #charge-progress-container');
 
-    if (!gsap || !header || !mystic || !tarot) {
+    if (!header || !mystic || !tarot) {
       resolve();
       return;
     }
@@ -88,8 +87,6 @@ export function playIntro() {
  */
 export function playHeaderCollapse() {
   return new Promise((resolve) => {
-    if (!gsap) { resolve(); return; }
-
     const header = document.getElementById('header');
     const uiLayer = document.getElementById('ui-layer');
     const subItems = document.querySelectorAll('#status-text, #charge-progress-container');

@@ -1201,7 +1201,7 @@ header.collapsed h1::after {
 /* 核心动画路径 */
 .animated-path {
   stroke: var(--color-gold);
-  stroke-width: 1.5;
+  stroke-width: 0.5;
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -1215,7 +1215,7 @@ header.collapsed h1::after {
   stroke-dashoffset: 2600;
 
   /* 关键点 3：触发 CSS 生长动画 */
-  animation: borderGrow 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: borderGrow 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 
   /* 配合滤镜增加金色霓虹微光 */
   filter: drop-shadow(0 0 3px var(--color-gold-glow));
@@ -1252,6 +1252,7 @@ header.collapsed h1::after {
 @keyframes fadeIn {
   to {
     opacity: 0.4;
+    rotate: 360deg;
   }
 }
 

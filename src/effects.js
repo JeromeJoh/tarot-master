@@ -1,4 +1,6 @@
-// effects.js — particles, cursor trail, charge visuals
+// effects.js — particles, cursor trail, charge visuals (GSAP-powered)
+import gsap from 'gsap';
+
 /**
  * Spawns a cursor trail particle at (x, y).
  * @param {number} x
@@ -13,7 +15,14 @@ export function spawnTrail(x, y) {
   trail.style.background = `hsla(${hue}, 80%, 60%, 0.8)`;
   trail.style.boxShadow = `0 0 10px hsla(${hue}, 80%, 60%, 0.8)`;
   document.body.appendChild(trail);
-  setTimeout(() => trail.remove(), 500);
+
+  gsap.to(trail, {
+    opacity: 0,
+    scale: 0.2,
+    duration: 0.5,
+    ease: 'power2.out',
+    onComplete: () => trail.remove()
+  });
 }
 
 /**
@@ -47,7 +56,15 @@ export function spawnChargeParticles(rect, progress) {
     }
 
     document.body.appendChild(p);
-    setTimeout(() => p.remove(), 800);
+
+    gsap.to(p, {
+      y: -150,
+      scale: 0.2,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power2.out',
+      onComplete: () => p.remove()
+    });
   }
 }
 
@@ -70,16 +87,17 @@ export function spawnInterpretationParticles() {
     p.style.opacity = '0.8';
     p.style.zIndex = '9999';
 
-    p.animate([
-      { transform: 'translateY(0) scale(1)', opacity: 0.8 },
-      { transform: 'translateY(-100px) scale(0)', opacity: 0 }
-    ], {
-      duration: 1000 + Math.random() * 1000,
-      easing: 'ease-out'
-    });
-
     document.body.appendChild(p);
-    setTimeout(() => p.remove(), 2000);
+
+    const duration = 1 + Math.random();
+    gsap.to(p, {
+      y: -100,
+      scale: 0,
+      opacity: 0,
+      duration,
+      ease: 'power2.out',
+      onComplete: () => p.remove()
+    });
   }
 }
 
