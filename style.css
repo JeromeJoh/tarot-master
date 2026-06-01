@@ -196,35 +196,6 @@ header h1 {
   /* overflow: hidden; */
 }
 
-/* Light-gap glow between the two words — pseudo-element on the h1 */
-header h1::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 2px;
-  height: 120%;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    var(--accent-peach) 40%,
-    var(--accent-gold) 50%,
-    var(--accent-peach) 60%,
-    transparent 100%
-  );
-  opacity: 0.55;
-  filter: blur(3px);
-  pointer-events: none;
-  /* Only visible during intro — hidden once header collapses */
-  transition: opacity 0.4s;
-}
-
-/* Hide the gap glow once the header is in collapsed/badge state */
-header.collapsed h1::before {
-  opacity: 0;
-}
-
 h2,
 h3 {
   font-family: 'Uncial Antiqua', cursive;

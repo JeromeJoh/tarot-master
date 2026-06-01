@@ -50,6 +50,7 @@ class MyToast extends HTMLElement {
         gap: 10px;
         pointer-events: none;
         align-items: inherit;
+        padding: 8px;
       }
 
       /* ── Base toast ── */
@@ -187,6 +188,9 @@ class MyToast extends HTMLElement {
       :host([position^="bottom"]) .fade-slide {
         transform: translateY(14px) scale(0.97);
       }
+      :host([position^="bottom"]) .fade-slide.show {
+        transform: translateY(0) scale(1);
+      }
       .fade-slide.show {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -246,7 +250,46 @@ class MyToast extends HTMLElement {
 
   /** Icon map matching the existing toast.js TYPE_ICONS */
   static _icon(type) {
-    return { info: 'ℹ️', success: '✅', warning: '⚠️', error: '❌', persistent: '📌' }[type] ?? 'ℹ️';
+    // Inline SVGs use `currentColor` so they inherit `--icon-color` from CSS
+    return ({
+      info: `
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" fill="none" />
+          <line x1="12" y1="8" x2="12" y2="12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          <circle cx="12" cy="16" r="0.8" fill="currentColor" />
+        </svg>
+      `,
+      success: `
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" fill="none" />
+          <path d="M8.5 12.5l2 2 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+        </svg>
+      `,
+      warning: `
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 4.5l8 14H4l8-14z" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linejoin="round" />
+          <line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          <circle cx="12" cy="16.2" r="0.7" fill="currentColor" />
+        </svg>
+      `,
+      error: `
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" fill="none" />
+          <path d="M9 9l6 6M15 9l-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+        </svg>
+      `,
+      persistent: `
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 3v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          <path d="M9 21l6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          <path d="M7 11L3 9l6-8 4 3 4 4-4 4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linejoin="round" />
+        </svg>
+      `,
+    }[type] ?? `
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" fill="none" />
+      </svg>
+    `);
   }
 
   _addToast(message, type, duration, animation) {
@@ -272,7 +315,9 @@ class MyToast extends HTMLElement {
 
     const icon = document.createElement('span');
     icon.className = 'toast-icon';
-    icon.textContent = MyToast._icon(type);
+    // inline SVG markup — set as HTML and mark decorative
+    icon.innerHTML = MyToast._icon(type);
+    icon.setAttribute('aria-hidden', 'true');
 
     const msg = document.createElement('span');
     msg.className = 'toast-message';

@@ -39,7 +39,7 @@ export default {
   // Buttons
   'btn.allowCamera': 'Allow Camera',
   'btn.interpret': '🔮 Read My Fate',
-  'btn.startReading': '✨ Begin',
+  'btn.startReading': 'Begin',
   'btn.interpretReading': '🔮 Read My Fate',
 
   // Errors
@@ -68,7 +68,7 @@ export default {
     {
       icon: '✦',
       heading: 'Begin your reading',
-      body: 'Click <strong>✨ Begin</strong> — or hold an open palm toward the camera — to shuffle the deck and start.',
+      body: 'Click <strong>Begin</strong> — or hold an open palm toward the camera — to shuffle the deck and start.',
     },
     {
       icon: '👁',
