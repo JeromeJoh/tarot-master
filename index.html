@@ -17,15 +17,17 @@
         href="https://icons.iconarchive.com/icons/icons8/windows-8/128/Astrology-Crystal-Ball-icon.png">
     <!-- Toast web component — must load before main module so customElements.define runs first -->
     <script type="module" src="/src/components/toast.js"></script>
+    <!-- Reusable modal web component -->
+    <script type="module" src="/src/components/modal.js"></script>
     <!-- Galaxy background web component (bundles its own Three.js import) -->
     <script type="module" src="/src/components/galaxy-background.js"></script>
 </head>
 
 <body>
-    <shader-background shader-src="/shaders/galaxy.frag" uniforms='{
+    <!-- <shader-background shader-src="/shaders/galaxy.frag" uniforms='{
     "uSpeed":0.3,
     "uColor":"#ffcc88"
-  }'></shader-background>
+  }'></shader-background> -->
 
     <!-- UI Layer -->
     <div id="ui-layer">
@@ -142,47 +144,27 @@
     </dialog>
 
     <!-- Settings Modal -->
-    <dialog id="settings-modal" aria-labelledby="settings-title">
-        <div class="settings-content">
-            <!-- Sticky header -->
-            <div class="modal-header">
-                <h2 id="settings-title">API Key Configuration (Local Storage)</h2>
-                <button class="modal-close-btn" id="close-settings-btn" aria-label="Close settings"></button>
-            </div>
-            <!-- Scrollable body -->
-            <div class="modal-body">
-                <p>Enter your DeepSeek API Key to enable AI interpretation.</p>
-                <p style="font-size: 0.9rem; color: #aaa;">
-                    No key yet? Visit <a href="https://platform.deepseek.com/api_keys" target="_blank"
-                        rel="noopener noreferrer">DeepSeek
-                        Platform</a>
-                    to get one.
-                </p>
-                <input type="password" id="api-token-input" placeholder="sk-..." aria-label="DeepSeek API token">
-                <div id="token-status" role="status" style="font-size: 0.8rem; margin: 10px 0; min-height: 1.2em;">
-                </div>
-                <button id="save-settings-btn" class="btn">Save</button>
-            </div>
+    <my-modal id="settings-modal" modal-title="API Key Configuration (Local Storage)" max-width="420px"
+        aria-labelledby="settings-title">
+        <div class="settings-modal-body">
+            <p id="settings-desc">Enter your DeepSeek API Key to enable AI interpretation.</p>
+            <p id="settings-hint" style="font-size: 0.9rem; color: #aaa;">
+                No key yet? Visit <a href="https://platform.deepseek.com/api_keys" target="_blank"
+                    rel="noopener noreferrer">DeepSeek Platform</a> to get one.
+            </p>
+            <input type="password" id="api-token-input" placeholder="sk-..." aria-label="DeepSeek API token">
+            <div id="token-status" role="status" style="font-size: 0.8rem; margin: 10px 0; min-height: 1.2em;"></div>
+            <button id="save-settings-btn" class="btn">Save</button>
         </div>
-    </dialog>
+    </my-modal>
 
     <!-- Toast web component host — singleton, managed by my-toast -->
     <my-toast position="bottom-left" animation="fade-slide" aria-live="polite" aria-atomic="true"></my-toast>
 
     <!-- Instructions Modal -->
-    <dialog id="instructions-modal" aria-labelledby="instructions-title">
-        <div class="instructions-content">
-            <!-- Sticky header -->
-            <div class="modal-header">
-                <h2 id="instructions-title">How to Play</h2>
-                <button class="modal-close-btn" id="instructions-close-btn" aria-label="Close instructions"></button>
-            </div>
-            <!-- Scrollable body -->
-            <div class="modal-body">
-                <ol id="instructions-steps" class="instructions-steps"></ol>
-            </div>
-        </div>
-    </dialog>
+    <my-modal id="instructions-modal" modal-title="How to Play" max-width="560px" aria-labelledby="instructions-title">
+        <ol id="instructions-steps" class="instructions-steps"></ol>
+    </my-modal>
 
     <!-- Instructions trigger button (bottom-right) -->
     <button id="instructions-btn" class="top-bar-btn instructions-fab" aria-label="Open instructions">

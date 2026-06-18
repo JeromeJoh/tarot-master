@@ -458,7 +458,6 @@ function resetHighlights() {
 function initInstructionsModal() {
   const btn = document.getElementById('instructions-btn');
   const modal = document.getElementById('instructions-modal');
-  const closeBtn = document.getElementById('instructions-close-btn');
   const list = document.getElementById('instructions-steps');
   if (!btn || !modal || !list) return;
 
@@ -482,34 +481,27 @@ function initInstructionsModal() {
   function openModal() {
     // Rebuild steps so locale changes are reflected
     buildSteps();
-    const titleEl = modal.querySelector('h2');
-    if (titleEl) titleEl.innerText = t('instructions.title');
-    modal.showModal();
-  }
-
-  function closeModal() {
-    modal.close();
+    modal.setAttribute('modal-title', t('instructions.title'));
+    modal.open();
   }
 
   btn.addEventListener('click', openModal);
-  closeBtn?.addEventListener('click', closeModal);
-
-  // Dialog element automatically handles Escape key
+  // my-modal handles close button and Escape internally
 }
 function initSettingsModal() {
   const settingsBtn = document.getElementById('settings-btn');
   const settingsModal = document.getElementById('settings-modal');
   const saveBtn = document.getElementById('save-settings-btn');
-  const closeBtn = document.getElementById('close-settings-btn');
   const tokenInput = document.getElementById('api-token-input');
 
   // Apply i18n to modal labels
-  const titleEl = settingsModal?.querySelector('h2');
-  if (titleEl) titleEl.innerText = t('settings.title');
+  if (settingsModal) settingsModal.setAttribute('modal-title', t('settings.title'));
 
-  const descEls = settingsModal?.querySelectorAll('p');
-  if (descEls?.[0]) descEls[0].innerText = t('settings.description');
-  if (descEls?.[1]) descEls[1].innerHTML = t('settings.hint');
+  const descEl = document.getElementById('settings-desc');
+  if (descEl) descEl.innerText = t('settings.description');
+
+  const hintEl = document.getElementById('settings-hint');
+  if (hintEl) hintEl.innerHTML = t('settings.hint');
 
   if (saveBtn) saveBtn.innerText = t('settings.save');
 
@@ -518,7 +510,7 @@ function initSettingsModal() {
     console.log('Opening settings modal');
     const stored = localStorage.getItem('deepseek_token');
     if (tokenInput) tokenInput.value = stored ?? '';
-    if (settingsModal) settingsModal.showModal();
+    if (settingsModal) settingsModal.open();
   });
 
   // Save
@@ -534,10 +526,7 @@ function initSettingsModal() {
     }
   });
 
-  // Close
-  closeBtn?.addEventListener('click', () => {
-    if (settingsModal) settingsModal.close();
-  });
+  // my-modal handles close button and Escape internally
 }
 
 // --- Interpretation Modal close button ---
@@ -614,12 +603,12 @@ function localizeUI() {
   // Settings modal
   const settingsModal = el('settings-modal');
   if (settingsModal) {
-    const titleEl = settingsModal.querySelector('h2');
-    if (titleEl) titleEl.innerText = t('settings.title');
-    const descEls = settingsModal.querySelectorAll('p');
-    if (descEls?.[0]) descEls[0].innerText = t('settings.description');
-    if (descEls?.[1]) descEls[1].innerHTML = t('settings.hint');
+    settingsModal.setAttribute('modal-title', t('settings.title'));
   }
+  const settingsDescEl = document.getElementById('settings-desc');
+  if (settingsDescEl) settingsDescEl.innerText = t('settings.description');
+  const settingsHintEl = document.getElementById('settings-hint');
+  if (settingsHintEl) settingsHintEl.innerHTML = t('settings.hint');
   const saveBtn = el('save-settings-btn');
   if (saveBtn) saveBtn.innerText = t('settings.save');
 
